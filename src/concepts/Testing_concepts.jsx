@@ -1,0 +1,628 @@
+import { useState } from "react";
+
+export const meta = {
+  title: "Testing Concepts",
+  description: "Software testing methodologies and best practices",
+};
+
+const categories = [
+  {
+    name: "Fundamentals",
+    icon: "◆",
+    color: "#F97316",
+    concepts: [
+      { id: 1, name: "Software Testing", desc: "The process of evaluating software to detect differences between expected and actual results. Verifies that software meets requirements and is defect-free." },
+      { id: 2, name: "Verification vs Validation", desc: "Verification: 'Are we building the product right?' (process checks). Validation: 'Are we building the right product?' (outcome checks against user needs)." },
+      { id: 3, name: "Quality Assurance (QA) vs Quality Control (QC)", desc: "QA: process-oriented, prevents defects (reviews, standards). QC: product-oriented, detects defects (testing, inspection). QA is proactive, QC is reactive." },
+      { id: 4, name: "Test Plan", desc: "Document outlining testing strategy, scope, objectives, schedule, resources, deliverables, and exit criteria. The blueprint for the entire testing effort." },
+      { id: 5, name: "Test Case", desc: "A set of conditions and steps to verify a specific feature. Includes: preconditions, test steps, input data, expected result, actual result, pass/fail status." },
+      { id: 6, name: "Test Suite", desc: "A collection of related test cases grouped together. Organized by feature, module, priority, or test type. Executed as a unit." },
+      { id: 7, name: "Test Scenario", desc: "A high-level description of what to test, derived from user stories or requirements. One scenario may produce multiple detailed test cases." },
+      { id: 8, name: "Test Strategy", desc: "High-level document defining the testing approach for the entire project. Test levels, types, tools, environments, risk assessment, and entry/exit criteria." },
+      { id: 9, name: "Test Oracle", desc: "A mechanism to determine expected results. Sources: requirements docs, existing system, domain expert, heuristics. Without one, you can't judge pass/fail." },
+      { id: 10, name: "Defect / Bug", desc: "A flaw in the software causing it to behave unexpectedly. Lifecycle: New → Assigned → Open → Fixed → Retested → Closed (or Reopened)." },
+      { id: 11, name: "Defect Severity vs Priority", desc: "Severity: technical impact (critical, major, minor, trivial). Priority: business urgency (P0–P4). A typo on the homepage is low severity but high priority." },
+      { id: 12, name: "Test Coverage", desc: "The degree to which tests exercise the codebase or requirements. Code coverage (lines, branches, functions) and requirement coverage. 100% ≠ bug-free." },
+      { id: 13, name: "Test Environment", desc: "The hardware, software, network, and data configuration where tests run. Should mirror production as closely as possible. Environment parity matters." },
+      { id: 14, name: "Test Data Management", desc: "Creating, maintaining, and provisioning data for testing. Synthetic generation, production cloning (anonymized), fixtures, factories, seed scripts." },
+      { id: 15, name: "Test Harness", desc: "A framework of stubs, drivers, and tools enabling automated test execution. Provides scaffolding to run tests and collect results consistently." },
+      { id: 16, name: "Entry & Exit Criteria", desc: "Entry: conditions before testing starts (build ready, env set up). Exit: conditions to stop (coverage met, all P0/P1 fixed, sign-off received)." },
+      { id: 17, name: "Traceability Matrix", desc: "Maps requirements to test cases ensuring complete coverage. Every requirement has at least one test. Every test traces to a requirement." },
+    ],
+  },
+  {
+    name: "Testing Levels",
+    icon: "⬡",
+    color: "#3B82F6",
+    concepts: [
+      { id: 18, name: "Unit Testing", desc: "Testing the smallest testable parts (functions, methods, classes) in isolation. Fast, deterministic, cheap to run. Foundation of the testing pyramid." },
+      { id: 19, name: "Component Testing", desc: "Testing individual components or modules with their internal dependencies. Larger scope than unit tests. Verifies a module's interface and behavior." },
+      { id: 20, name: "Integration Testing", desc: "Testing how modules or services interact together. Verifies interfaces, data flow, and communication. Catches issues unit tests miss." },
+      { id: 21, name: "System Testing", desc: "Testing the complete integrated system against requirements. End-to-end flows, full stack. Functional and non-functional aspects verified." },
+      { id: 22, name: "Acceptance Testing", desc: "Final verification that the system meets business requirements. Often performed by or for stakeholders. User Acceptance Testing (UAT) is the most common form." },
+      { id: 23, name: "End-to-End (E2E) Testing", desc: "Simulating real user workflows through the entire application stack including UI, APIs, databases, and third-party services. Validates complete flows." },
+      { id: 24, name: "Alpha Testing", desc: "Internal testing by the development team or QA in a controlled environment before external release. Catches bugs before beta users see them." },
+      { id: 25, name: "Beta Testing", desc: "Pre-release testing by a limited group of real end users in their own environment. Gathers real-world feedback, uncovers usage patterns devs didn't anticipate." },
+    ],
+  },
+  {
+    name: "Testing Types — Functional",
+    icon: "⬢",
+    color: "#10B981",
+    concepts: [
+      { id: 26, name: "Functional Testing", desc: "Validates that every function of the software operates according to requirements. Inputs, outputs, data handling, business logic, and user flows." },
+      { id: 27, name: "Smoke Testing", desc: "Quick, shallow tests to verify the most critical functions work. 'Does the build even turn on?' Run first after deployment. Also called Build Verification Testing." },
+      { id: 28, name: "Sanity Testing", desc: "Focused testing on a specific area after changes. Not exhaustive — just checks that the fix works and didn't obviously break related features." },
+      { id: 29, name: "Regression Testing", desc: "Re-running existing tests after code changes to ensure nothing broke. Automated regression suites are essential. The safety net for every release." },
+      { id: 30, name: "Happy Path Testing", desc: "Testing the expected, ideal user flow with valid inputs. The 'golden path' through the application. Should always pass before edge cases are tested." },
+      { id: 31, name: "Negative Testing", desc: "Deliberately providing invalid inputs, unexpected conditions, or error scenarios. Ensures the system handles failures gracefully without crashing." },
+      { id: 32, name: "Boundary Value Analysis (BVA)", desc: "Testing at the edges of input ranges. If valid range is 1–100, test: 0, 1, 2, 99, 100, 101. Bugs cluster at boundaries." },
+      { id: 33, name: "Equivalence Partitioning", desc: "Dividing inputs into groups (partitions) that should behave the same. Test one value per partition instead of every possible input. Reduces test count." },
+      { id: 34, name: "Decision Table Testing", desc: "Tabulating all combinations of input conditions and their expected outcomes. Systematic way to cover complex business rules and logic." },
+      { id: 35, name: "State Transition Testing", desc: "Testing systems that behave differently based on current state. Diagrams show states, transitions, events, and actions. ATMs, workflows, order status." },
+      { id: 36, name: "Error Guessing", desc: "Experience-based technique where testers intuitively identify likely error-prone areas. Based on knowledge of common mistakes, past bugs, and domain expertise." },
+      { id: 37, name: "Pairwise / Combinatorial Testing", desc: "Testing all possible pairs of input parameter combinations instead of exhaustive combinations. Dramatically reduces test cases while catching most defects." },
+      { id: 38, name: "Data-Driven Testing", desc: "Separating test logic from test data. Same test script runs with multiple datasets from external sources (CSV, database, JSON). Increases coverage efficiently." },
+      { id: 39, name: "Keyword-Driven Testing", desc: "Tests defined using keywords (Click, Enter, Verify) in a table format. Non-programmers can create tests. Robot Framework is a popular implementation." },
+    ],
+  },
+  {
+    name: "Testing Types — Non-Functional",
+    icon: "◈",
+    color: "#EC4899",
+    concepts: [
+      { id: 40, name: "Non-Functional Testing", desc: "Testing attributes beyond functionality: performance, security, usability, reliability, scalability, compatibility. How well the system works, not what it does." },
+      { id: 41, name: "Performance Testing", desc: "Evaluating system speed, responsiveness, and stability under workload. Umbrella term for load, stress, endurance, and spike testing." },
+      { id: 42, name: "Load Testing", desc: "Testing under expected peak load. 'Can we handle 10,000 concurrent users?' Measures response times, throughput, resource usage under normal-to-high traffic." },
+      { id: 43, name: "Stress Testing", desc: "Pushing beyond maximum capacity to find breaking points. 'At what load does the system fail?' Identifies graceful degradation behavior and recovery." },
+      { id: 44, name: "Spike Testing", desc: "Sudden dramatic increase in load (e.g., flash sale, viral event). Tests how the system handles abrupt traffic surges and recovers afterward." },
+      { id: 45, name: "Endurance / Soak Testing", desc: "Sustained load over extended periods (hours, days). Detects memory leaks, resource exhaustion, degradation over time, and connection pool issues." },
+      { id: 46, name: "Scalability Testing", desc: "Measuring the system's ability to scale up (or down) as load changes. Verifies auto-scaling policies, horizontal scaling, and resource limits." },
+      { id: 47, name: "Volume Testing", desc: "Testing with large amounts of data. Large databases, many files, huge payloads. Identifies performance degradation as data grows over time." },
+      { id: 48, name: "Concurrency Testing", desc: "Multiple users performing the same operation simultaneously. Detects race conditions, deadlocks, data corruption. 100 users updating the same record." },
+      { id: 49, name: "Latency Testing", desc: "Measuring response time for individual operations. p50, p95, p99 percentiles. Network latency, database query time, API response time. Aiming for consistency." },
+      { id: 50, name: "Benchmark Testing", desc: "Comparing system performance against a known standard or previous version. Establishes baselines and detects performance regressions." },
+      { id: 51, name: "Usability Testing", desc: "Evaluating how easy and intuitive the software is for real users. Task completion rate, time-on-task, error rate, satisfaction scores. Think-aloud protocol." },
+      { id: 52, name: "Accessibility Testing (a11y)", desc: "Verifying software is usable by people with disabilities. WCAG guidelines, screen reader compatibility, keyboard navigation, color contrast, ARIA labels." },
+      { id: 53, name: "Compatibility Testing", desc: "Ensuring the software works across browsers, devices, OS versions, screen sizes, and resolutions. Cross-browser (Chrome, Firefox, Safari), cross-device." },
+      { id: 54, name: "Localization (L10n) Testing", desc: "Verifying software works correctly for specific locales: translations, date/time formats, currency, number formats, RTL text, cultural appropriateness." },
+      { id: 55, name: "Internationalization (i18n) Testing", desc: "Verifying the software architecture supports any locale without code changes. Unicode support, string externalization, layout flexibility, locale switching." },
+      { id: 56, name: "Reliability Testing", desc: "Verifying the system performs consistently over time under specified conditions. Mean Time Between Failures (MTBF), failure rate, recovery time." },
+      { id: 57, name: "Installability Testing", desc: "Testing installation, uninstallation, and upgrade procedures. Fresh installs, upgrades from previous versions, rollbacks, different configurations." },
+      { id: 58, name: "Configuration Testing", desc: "Testing the software under different hardware and software configurations. Varying RAM, CPU, OS versions, browser settings, network conditions." },
+    ],
+  },
+  {
+    name: "Security Testing",
+    icon: "⬟",
+    color: "#EF4444",
+    concepts: [
+      { id: 59, name: "Security Testing (Overview)", desc: "Identifying vulnerabilities, threats, and risks in software. Ensures data protection, integrity, authentication, and authorization work correctly." },
+      { id: 60, name: "SAST (Static Application Security Testing)", desc: "Analyzing source code for vulnerabilities without running the application. SonarQube, Semgrep, CodeQL, Checkmarx. Fast, catches issues early in CI." },
+      { id: 61, name: "DAST (Dynamic Application Security Testing)", desc: "Testing the running application by simulating attacks. OWASP ZAP, Burp Suite. Finds runtime vulnerabilities like injection and misconfiguration." },
+      { id: 62, name: "IAST (Interactive Application Security Testing)", desc: "Combines SAST and DAST. Instruments the running application to analyze security in real-time during tests. Lower false positive rate. Contrast Security." },
+      { id: 63, name: "Penetration Testing (Pen Testing)", desc: "Simulated cyber attacks by ethical hackers to find exploitable vulnerabilities. Black box (no info), white box (full info), grey box (partial info)." },
+      { id: 64, name: "Vulnerability Scanning", desc: "Automated tools scanning for known vulnerabilities (CVEs) in systems, networks, and dependencies. Nessus, Qualys, Snyk, Trivy. Scheduled and continuous." },
+      { id: 65, name: "OWASP Top 10", desc: "Industry-standard list of critical web application security risks: injection, broken auth, sensitive data exposure, XSS, CSRF, SSRF, insecure deserialization, etc." },
+      { id: 66, name: "SQL Injection Testing", desc: "Attempting to inject malicious SQL through input fields. Tests parameterized queries, ORM usage, and input sanitization. Can lead to full database compromise." },
+      { id: 67, name: "Cross-Site Scripting (XSS) Testing", desc: "Injecting malicious scripts into web pages viewed by other users. Stored, reflected, and DOM-based XSS. Test input encoding, CSP headers, output escaping." },
+      { id: 68, name: "Cross-Site Request Forgery (CSRF) Testing", desc: "Tricking authenticated users into performing unintended actions. Verify CSRF tokens, SameSite cookies, and origin header validation." },
+      { id: 69, name: "Authentication & Authorization Testing", desc: "Verifying login flows, session management, role-based access, privilege escalation prevention, password policies, MFA, and token handling (JWT, OAuth)." },
+      { id: 70, name: "API Security Testing", desc: "Testing APIs for broken auth, injection, rate limiting, data exposure, mass assignment, BOLA (broken object level auth). OWASP API Security Top 10." },
+      { id: 71, name: "Fuzzing (Fuzz Testing)", desc: "Feeding random, malformed, or unexpected data to find crashes, memory leaks, and security holes. AFL, libFuzzer, OSS-Fuzz. Finds edge cases humans miss." },
+      { id: 72, name: "SCA (Software Composition Analysis)", desc: "Scanning third-party dependencies for known vulnerabilities and license issues. Snyk, Dependabot, Renovate, OWASP Dependency-Check. Most code is third-party." },
+      { id: 73, name: "Threat Modeling", desc: "Structured approach to identifying security threats. STRIDE (Spoofing, Tampering, Repudiation, Info Disclosure, DoS, Elevation). Done during design phase." },
+    ],
+  },
+  {
+    name: "Test Automation",
+    icon: "⊞",
+    color: "#8B5CF6",
+    concepts: [
+      { id: 74, name: "Test Automation", desc: "Using software tools to execute tests, compare results, and report outcomes automatically. Faster, repeatable, and more reliable than manual testing at scale." },
+      { id: 75, name: "Testing Pyramid", desc: "Strategy: many fast unit tests at the base, fewer integration tests in the middle, fewest slow E2E tests at the top. Inverted pyramids are expensive and flaky." },
+      { id: 76, name: "Testing Trophy", desc: "Kent C. Dodds' model for frontend: static analysis at base → unit → integration (largest layer) → E2E at top. Emphasizes integration tests over unit tests." },
+      { id: 77, name: "Testing Diamond / Honeycomb", desc: "Alternative models emphasizing integration tests as the largest layer. Reflects microservices reality where service interactions are the riskiest area." },
+      { id: 78, name: "Test Automation Frameworks", desc: "Structured platforms for writing and running automated tests. Jest, pytest, JUnit, Mocha, Vitest, xUnit. Provide assertions, runners, reporters, and hooks." },
+      { id: 79, name: "Page Object Model (POM)", desc: "Design pattern for UI test automation. Each page has a class encapsulating its elements and interactions. Reduces duplication and improves maintainability." },
+      { id: 80, name: "Screenplay Pattern", desc: "Actor-centric test design pattern. Actors perform tasks using abilities. More readable and scalable than Page Object Model for complex workflows." },
+      { id: 81, name: "Test Fixtures", desc: "Predefined state or data needed before tests run. Setup and teardown logic. Database seeding, mock data, file creation. Consistent starting point." },
+      { id: 82, name: "Assertions", desc: "Statements verifying expected outcomes. assertEquals, assertTrue, toContain, toHaveBeenCalled. The 'judge' in every test case. One assertion per test ideally." },
+      { id: 83, name: "Test Doubles (Overview)", desc: "Generic term for any fake object used in testing. Includes mocks, stubs, spies, fakes, and dummies. Replace real dependencies with controlled alternatives." },
+      { id: 84, name: "Mocks", desc: "Objects with pre-programmed expectations about calls they'll receive. Verify behavior: was this method called with these arguments? Jest mock, Mockito." },
+      { id: 85, name: "Stubs", desc: "Objects providing canned responses to calls made during tests. Control what data a dependency returns without verifying how it's called." },
+      { id: 86, name: "Spies", desc: "Wrappers around real objects that record calls while still executing the original code. Observe behavior without replacing functionality. Jest spyOn." },
+      { id: 87, name: "Fakes", desc: "Working implementations with shortcuts. In-memory database instead of real DB, local file system instead of S3. Simplified but functional." },
+      { id: 88, name: "Flaky Tests", desc: "Tests that pass and fail inconsistently without code changes. Causes: timing issues, shared state, external dependencies, race conditions. Must be quarantined." },
+      { id: 89, name: "Test Isolation", desc: "Each test is independent — no shared state, no execution order dependencies. Tests can run in parallel without interference. Reset state between tests." },
+      { id: 90, name: "Parallel Test Execution", desc: "Running tests simultaneously across multiple threads, processes, or machines. Dramatically reduces suite execution time. Requires proper test isolation." },
+      { id: 91, name: "Test Reporting", desc: "Generating human-readable test results: pass/fail counts, duration, screenshots on failure, trend charts. Allure, JUnit XML, HTML reporters." },
+      { id: 92, name: "Code Coverage Metrics", desc: "Line coverage, branch coverage, function coverage, statement coverage. Tools: Istanbul/nyc, JaCoCo, coverage.py. Aim for meaningful coverage, not 100%." },
+      { id: 93, name: "Mutation Testing", desc: "Introducing small code changes (mutants) to verify tests catch them. If a test passes with mutated code, it's weak. Stryker, PITest. Measures test quality." },
+    ],
+  },
+  {
+    name: "UI & Frontend Testing",
+    icon: "⬣",
+    color: "#06B6D4",
+    concepts: [
+      { id: 94, name: "Browser Automation", desc: "Programmatically controlling a web browser to simulate user interactions. Clicking, typing, navigating, scrolling. Foundation of E2E and UI testing." },
+      { id: 95, name: "Cypress", desc: "Modern E2E testing framework. Runs in the browser, auto-waits, time-travel debugging, network stubbing. JavaScript-only. Great DX but single-browser origin." },
+      { id: 96, name: "Playwright", desc: "Microsoft's cross-browser automation tool. Chromium, Firefox, WebKit. Auto-wait, codegen, tracing, parallel execution. TypeScript/JS/Python/Java/.NET." },
+      { id: 97, name: "Selenium", desc: "Original browser automation tool. WebDriver protocol. Supports all browsers and languages. Mature ecosystem but verbose API and no auto-waiting." },
+      { id: 98, name: "Visual Regression Testing", desc: "Screenshot comparisons to detect unintended UI changes. Pixel-by-pixel diff or perceptual diff. Percy, Chromatic, Applitools, BackstopJS." },
+      { id: 99, name: "Snapshot Testing", desc: "Capturing a serialized output (DOM, component tree, API response) and comparing against saved snapshot. Jest snapshots. Detects unexpected changes." },
+      { id: 100, name: "Component Testing (Frontend)", desc: "Testing UI components in isolation with real rendering. React Testing Library, Vue Test Utils, Storybook interaction tests. Verify behavior, not implementation." },
+      { id: 101, name: "Storybook Testing", desc: "Storybook for visual development + interaction tests, accessibility checks, and visual regression. Component documentation doubles as test suite." },
+      { id: 102, name: "Testing Library Philosophy", desc: "Testing from the user's perspective: query by role, text, label — not by CSS selectors or test IDs. 'The more your tests resemble usage, the more confidence.'" },
+      { id: 103, name: "Cross-Browser Testing", desc: "Verifying functionality across Chrome, Firefox, Safari, Edge. BrowserStack, LambdaTest, Sauce Labs for cloud testing. Playwright covers engines natively." },
+      { id: 104, name: "Responsive / Device Testing", desc: "Testing across screen sizes, orientations, and device types. Viewport emulation, real device labs. Mobile-first testing is increasingly critical." },
+      { id: 105, name: "Headless Browser Testing", desc: "Running browsers without a GUI for faster CI execution. Headless Chrome, Firefox, WebKit. Default mode for CI pipelines. Playwright, Puppeteer." },
+      { id: 106, name: "DOM Testing", desc: "Testing the Document Object Model directly using JSDOM or happy-dom. Faster than browser testing but less realistic. Good for unit-testing components." },
+    ],
+  },
+  {
+    name: "API & Backend Testing",
+    icon: "↯",
+    color: "#F59E0B",
+    concepts: [
+      { id: 107, name: "API Testing", desc: "Testing application programming interfaces directly — request/response validation, status codes, headers, payload structure, auth, error handling. No UI involved." },
+      { id: 108, name: "REST API Testing", desc: "Testing RESTful endpoints: HTTP methods (GET, POST, PUT, DELETE), status codes (200, 400, 401, 404, 500), JSON schema validation, HATEOAS links." },
+      { id: 109, name: "GraphQL Testing", desc: "Testing queries, mutations, subscriptions. Schema validation, resolver testing, depth limiting, query complexity analysis, error handling for partial responses." },
+      { id: 110, name: "Contract Testing", desc: "Verifying that API provider and consumer agree on the interface. Consumer-driven contracts. Pact is the standard. Prevents breaking changes across services." },
+      { id: 111, name: "Schema Validation", desc: "Ensuring API responses match the expected schema (JSON Schema, OpenAPI spec, GraphQL SDL). Catches structural regressions and missing/extra fields." },
+      { id: 112, name: "Postman / Insomnia", desc: "GUI tools for manual and automated API testing. Collections, environments, pre/post scripts, CI integration. Postman also supports mock servers." },
+      { id: 113, name: "Supertest / REST Assured", desc: "Code-level HTTP testing libraries. Supertest (Node.js), REST Assured (Java), httpx (Python), Requests (Python). Programmatic API validation in test suites." },
+      { id: 114, name: "Database Testing", desc: "Verifying data integrity, CRUD operations, constraints, triggers, stored procedures, migrations, and rollbacks. Test queries, indexes, and data consistency." },
+      { id: 115, name: "Message Queue Testing", desc: "Testing producers, consumers, message format, ordering, delivery guarantees, dead letter queues, idempotency. Kafka, RabbitMQ, SQS test patterns." },
+      { id: 116, name: "Service Virtualization", desc: "Simulating dependent services that are unavailable, slow, or expensive to use in testing. WireMock, Mountebank, MockServer. Test in isolation." },
+      { id: 117, name: "gRPC Testing", desc: "Testing Protocol Buffer contracts, streaming RPCs, error codes, deadline handling, and interceptors. grpcurl, BloomRPC, and language-specific testing libraries." },
+    ],
+  },
+  {
+    name: "Mobile Testing",
+    icon: "⟐",
+    color: "#A855F7",
+    concepts: [
+      { id: 118, name: "Mobile Testing (Overview)", desc: "Testing native, hybrid, and mobile web apps. Unique challenges: device fragmentation, OS versions, network conditions, gestures, permissions, battery." },
+      { id: 119, name: "Appium", desc: "Open-source cross-platform mobile automation. Uses WebDriver protocol. Supports iOS, Android, Flutter. Write tests in any language. Industry standard." },
+      { id: 120, name: "XCUITest / Espresso", desc: "Native mobile testing frameworks. XCUITest for iOS (Swift/ObjC), Espresso for Android (Kotlin/Java). Faster and more reliable than cross-platform tools." },
+      { id: 121, name: "Detox", desc: "React Native E2E testing framework. Gray-box testing with automatic synchronization. Handles animations, network, and async operations natively." },
+      { id: 122, name: "Device Farm Testing", desc: "Running tests on real physical devices in the cloud. AWS Device Farm, Firebase Test Lab, BrowserStack, Sauce Labs. Catches device-specific issues." },
+      { id: 123, name: "Emulator vs Simulator vs Real Device", desc: "Emulator: mimics hardware+software (Android). Simulator: mimics software only (iOS). Real device: most accurate. Use all three strategically." },
+      { id: 124, name: "Network Condition Testing", desc: "Simulating 2G, 3G, 4G, offline, and flaky connections. Tests timeout handling, retry logic, offline mode, and data sync behavior." },
+      { id: 125, name: "App Distribution Testing (TestFlight / Play Console)", desc: "Beta distribution to testers before public release. TestFlight (iOS), Google Play Internal/Closed Testing. Collects crash reports and feedback." },
+    ],
+  },
+  {
+    name: "Specialized Testing",
+    icon: "⟡",
+    color: "#22D3EE",
+    concepts: [
+      { id: 126, name: "Chaos Engineering", desc: "Intentionally injecting failures into production systems to build confidence in resilience. Kill processes, inject latency, corrupt data. Netflix Chaos Monkey, Litmus, Gremlin." },
+      { id: 127, name: "Resilience Testing", desc: "Verifying system behavior under adverse conditions: service failures, network partitions, disk full, DNS failures, clock skew. Beyond chaos — systematic." },
+      { id: 128, name: "Disaster Recovery Testing", desc: "Validating backup restoration, failover procedures, and recovery time. Test RTO and RPO. If you haven't tested your backups, you don't have backups." },
+      { id: 129, name: "A/B Testing", desc: "Comparing two versions with real users to measure which performs better. Statistical significance, control vs variant, sample size calculation. Data-driven decisions." },
+      { id: 130, name: "Canary Testing", desc: "Deploying changes to a small percentage of traffic. Automated metric comparison against baseline. Promote or rollback based on SLIs. Kayenta, Flagger." },
+      { id: 131, name: "Feature Flag Testing", desc: "Testing all flag combinations and transitions. Verify behavior with flag on, off, and during toggles. Test cleanup when flags are removed." },
+      { id: 132, name: "Infrastructure Testing", desc: "Testing IaC before applying: Terratest, kitchen-terraform, Pulumi testing. Validate cloud resources are created correctly with correct configurations." },
+      { id: 133, name: "Compliance Testing", desc: "Verifying software meets regulatory requirements: GDPR, HIPAA, PCI-DSS, SOC2, SOX. Data handling, audit logs, encryption, access controls." },
+      { id: 134, name: "Data Pipeline Testing", desc: "Testing ETL/ELT workflows: data quality, schema validation, transformation logic, deduplication, latency, completeness. Great Expectations, dbt tests." },
+      { id: 135, name: "AI/ML Model Testing", desc: "Evaluating model accuracy, bias, fairness, robustness, and drift. Training/validation/test splits, cross-validation, adversarial testing, A/B testing in production." },
+      { id: 136, name: "Blockchain / Smart Contract Testing", desc: "Testing smart contract logic, gas optimization, security vulnerabilities (reentrancy, overflow). Hardhat, Foundry, Truffle testing frameworks." },
+      { id: 137, name: "IoT Testing", desc: "Testing embedded devices: firmware, connectivity, protocol compliance (MQTT, CoAP), power consumption, over-the-air updates, and sensor accuracy." },
+      { id: 138, name: "Game Testing", desc: "Functional, performance, compatibility, and playability testing for games. Frame rate, physics, multiplayer sync, load testing, console certification." },
+    ],
+  },
+  {
+    name: "Test Design Techniques",
+    icon: "◎",
+    color: "#14B8A6",
+    concepts: [
+      { id: 139, name: "Black Box Testing", desc: "Testing without knowledge of internal code structure. Based on requirements and specifications. Focus on inputs and outputs. Most functional testing is black box." },
+      { id: 140, name: "White Box Testing", desc: "Testing with full knowledge of internal code. Statement coverage, branch coverage, path coverage. Finding unreachable code, logic errors, and dead paths." },
+      { id: 141, name: "Grey Box Testing", desc: "Partial knowledge of internals. Combines black and white box approaches. Common in integration testing and security testing where some architecture is known." },
+      { id: 142, name: "Exploratory Testing", desc: "Simultaneous learning, test design, and execution. No predefined scripts — tester uses skill and intuition. Time-boxed sessions. Finds bugs automation misses." },
+      { id: 143, name: "Session-Based Test Management (SBTM)", desc: "Structured approach to exploratory testing. Chartered sessions, time-boxed, debriefed. Mission statement, notes, bugs found, areas covered." },
+      { id: 144, name: "Risk-Based Testing", desc: "Prioritizing test effort based on risk: probability × impact. High-risk areas get more testing. Focuses limited resources where they matter most." },
+      { id: 145, name: "Heuristic Test Strategy Model (HTSM)", desc: "James Bach's framework for test planning. Quality criteria, project environment, product elements, and test techniques combined systematically." },
+      { id: 146, name: "Test Charter", desc: "A mission statement for an exploratory testing session. Defines what to explore, with what resources, and what to look for. Focused but flexible." },
+      { id: 147, name: "Use Case Testing", desc: "Deriving tests from use case scenarios. Main flow, alternative flows, exception flows. Covers complete user interactions with the system." },
+      { id: 148, name: "Orthogonal Array Testing (OATS)", desc: "Statistical technique for testing with minimum test cases when inputs have multiple values. Guarantees pairwise coverage with mathematical efficiency." },
+      { id: 149, name: "Cause-Effect Graphing", desc: "Mapping inputs (causes) to outputs (effects) in a boolean graph. Generates decision tables systematically. Formal method for complex logic testing." },
+      { id: 150, name: "Model-Based Testing", desc: "Generating test cases from a model of the system (state machine, UML, decision tree). Tools: GraphWalker, Spec Explorer. Systematic and exhaustive." },
+    ],
+  },
+  {
+    name: "CI/CD & DevOps Testing",
+    icon: "⛉",
+    color: "#D946EF",
+    concepts: [
+      { id: 151, name: "Testing in CI/CD Pipelines", desc: "Automated tests as pipeline gates: lint → unit → integration → security → E2E → deploy. Tests must be fast, reliable, and deterministic." },
+      { id: 152, name: "Shift-Left Testing", desc: "Moving testing earlier in the development lifecycle. Write tests during design, not after coding. Static analysis, pair programming, TDD. Prevention over detection." },
+      { id: 153, name: "Shift-Right Testing", desc: "Testing in production: canary deploys, synthetic monitoring, feature flags, observability. Complements shift-left with real-world validation." },
+      { id: 154, name: "Test-Driven Development (TDD)", desc: "Write a failing test first → write minimum code to pass → refactor. Red-Green-Refactor cycle. Tests drive the design. Ensures high coverage by default." },
+      { id: 155, name: "Behavior-Driven Development (BDD)", desc: "Writing tests in natural language: Given-When-Then. Bridges devs, QA, and business. Cucumber, SpecFlow, Behave. Living documentation from executable specs." },
+      { id: 156, name: "Acceptance Test-Driven Development (ATDD)", desc: "Collaborative approach where acceptance criteria become automated tests before development begins. Devs, QA, and PO define tests together upfront." },
+      { id: 157, name: "Continuous Testing", desc: "Testing at every stage of the CI/CD pipeline, not just at the end. Pre-commit hooks, PR checks, post-deploy verification. Feedback in minutes, not days." },
+      { id: 158, name: "Test Impact Analysis", desc: "Running only the tests affected by code changes instead of the entire suite. Dramatically speeds up CI. Language-specific tools: Jest --changedSince, Launchable." },
+      { id: 159, name: "Test Containerization", desc: "Running tests inside containers for consistent environments. Testcontainers spins up real databases, message brokers, etc. in Docker for integration tests." },
+      { id: 160, name: "Pre-commit Hooks & Linting", desc: "Automated checks before code is committed: linting (ESLint, Ruff), formatting (Prettier, Black), type checking, secret scanning. Husky, pre-commit framework." },
+      { id: 161, name: "Quality Gates", desc: "Automated checkpoints in CI/CD that block progression if quality standards aren't met. Coverage thresholds, zero critical bugs, security scan pass." },
+      { id: 162, name: "Synthetic Monitoring", desc: "Simulated user transactions running continuously in production. Scripted browser checks, API pings, multi-step flows. Catches issues before real users do." },
+    ],
+  },
+  {
+    name: "Practices & Methodologies",
+    icon: "✦",
+    color: "#F472B6",
+    concepts: [
+      { id: 163, name: "Agile Testing", desc: "Testing embedded throughout agile sprints, not a separate phase. Whole-team responsibility. Continuous feedback, adaptive planning, iterative testing." },
+      { id: 164, name: "Agile Testing Quadrants", desc: "Q1: Technology-facing, guide dev (unit, component). Q2: Business-facing, guide dev (functional, story). Q3: Business-facing, critique (exploratory, usability). Q4: Technology-facing, critique (performance, security)." },
+      { id: 165, name: "Test Estimation", desc: "Estimating test effort: function points, test point analysis, use case points, experience-based. Factor in complexity, risk, coverage goals, and automation." },
+      { id: 166, name: "Test Automation ROI", desc: "Calculating return on automation investment. Manual cost × runs saved vs automation build + maintenance cost. Breakeven typically at 5–15 runs." },
+      { id: 167, name: "Testing Debt", desc: "Accumulated shortcuts in testing: missing tests, ignored flaky tests, outdated test data, poor coverage. Like tech debt — grows if not addressed." },
+      { id: 168, name: "Crowdsourced Testing", desc: "Distributing testing to a large pool of external testers worldwide. Real devices, diverse environments, fresh perspectives. Rainforest QA, Testlio, Applause." },
+      { id: 169, name: "Test Maturity Model (TMM)", desc: "Framework assessing organizational testing capability across levels. From ad-hoc (Level 1) to optimization (Level 5). Guides improvement roadmap." },
+      { id: 170, name: "Left Shift of Responsibility", desc: "Developers own quality, not just QA. Devs write unit+integration tests, review test plans, participate in exploratory sessions. QA coaches and enables." },
+      { id: 171, name: "Testing in Production (TiP)", desc: "Deliberately validating software in the live environment. Feature flags, monitoring, synthetic checks, canary analysis. Not the same as 'no testing'." },
+      { id: 172, name: "Property-Based Testing", desc: "Define properties that should always hold (e.g., sort(list) has same length), then the framework generates random inputs. fast-check (JS), Hypothesis (Python), QuickCheck." },
+      { id: 173, name: "Golden File / Approval Testing", desc: "Comparing output against a pre-approved 'golden' file. Any diff fails the test. Useful for complex outputs: HTML, reports, serialization. ApprovalTests library." },
+      { id: 174, name: "Regression Test Selection & Prioritization", desc: "Intelligently choosing which regression tests to run and in what order. Risk-based, change-based, history-based. Run high-value tests first." },
+      { id: 175, name: "Testing Anti-Patterns", desc: "Ice cream cone (inverted pyramid), testing implementation not behavior, slow suites, shared mutable state, sleeping instead of waiting, testing third-party code." },
+    ],
+  },
+];
+
+const totalConcepts = categories.reduce((sum, c) => sum + c.concepts.length, 0);
+
+export default function TestingConcepts() {
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [search, setSearch] = useState("");
+  const [expandedId, setExpandedId] = useState(null);
+
+  const filteredCategories = categories
+    .map((cat) => ({
+      ...cat,
+      concepts: cat.concepts.filter(
+        (c) =>
+          c.name.toLowerCase().includes(search.toLowerCase()) ||
+          c.desc.toLowerCase().includes(search.toLowerCase())
+      ),
+    }))
+    .filter((cat) => cat.concepts.length > 0);
+
+  const displayCategories = activeCategory
+    ? filteredCategories.filter((c) => c.name === activeCategory)
+    : filteredCategories;
+
+  const matchCount = filteredCategories.reduce(
+    (sum, c) => sum + c.concepts.length,
+    0
+  );
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#07080D",
+        color: "#CDCDE0",
+        fontFamily: "'Cascadia Code', 'JetBrains Mono', 'Fira Code', monospace",
+      }}
+    >
+      {/* Header */}
+      <div
+        style={{
+          padding: "40px 32px 24px",
+          borderBottom: "1px solid rgba(255,255,255,0.04)",
+          background:
+            "linear-gradient(180deg, rgba(249,115,22,0.05) 0%, transparent 100%)",
+        }}
+      >
+        <div style={{ maxWidth: 960, margin: "0 auto" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              marginBottom: 8,
+            }}
+          >
+            <span
+              style={{
+                fontSize: 11,
+                letterSpacing: 4,
+                textTransform: "uppercase",
+                color: "#F97316",
+                fontWeight: 600,
+              }}
+            >
+              Reference Guide
+            </span>
+            <span
+              style={{
+                fontSize: 10,
+                background: "rgba(249,115,22,0.12)",
+                color: "#F97316",
+                padding: "2px 8px",
+                borderRadius: 3,
+                letterSpacing: 1,
+              }}
+            >
+              {totalConcepts} CONCEPTS
+            </span>
+          </div>
+          <h1
+            style={{
+              fontSize: 28,
+              fontWeight: 700,
+              margin: "8px 0 6px",
+              color: "#F2F2FF",
+              letterSpacing: -0.5,
+              fontFamily: "'Sora', 'Plus Jakarta Sans', system-ui, sans-serif",
+            }}
+          >
+            Software Testing Concepts
+          </h1>
+          <p
+            style={{
+              fontSize: 13,
+              color: "#555570",
+              margin: 0,
+              lineHeight: 1.5,
+            }}
+          >
+            Unit tests to chaos engineering — the complete QA & testing encyclopedia
+          </p>
+
+          {/* Search */}
+          <div style={{ marginTop: 20, position: "relative" }}>
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search concepts..."
+              style={{
+                width: "100%",
+                padding: "10px 16px 10px 36px",
+                background: "rgba(255,255,255,0.025)",
+                border: "1px solid rgba(255,255,255,0.055)",
+                borderRadius: 8,
+                color: "#CDCDE0",
+                fontSize: 13,
+                fontFamily: "inherit",
+                outline: "none",
+                boxSizing: "border-box",
+              }}
+            />
+            <span
+              style={{
+                position: "absolute",
+                left: 12,
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "#3A3A4A",
+                fontSize: 14,
+              }}
+            >
+              ⌕
+            </span>
+            {search && (
+              <span
+                style={{
+                  position: "absolute",
+                  right: 12,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  color: "#555570",
+                  fontSize: 11,
+                }}
+              >
+                {matchCount} results
+              </span>
+            )}
+          </div>
+
+          {/* Category pills */}
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 6,
+              marginTop: 16,
+            }}
+          >
+            <button
+              onClick={() => setActiveCategory(null)}
+              style={{
+                padding: "5px 12px",
+                fontSize: 11,
+                borderRadius: 4,
+                border: "1px solid",
+                borderColor: !activeCategory
+                  ? "rgba(249,115,22,0.4)"
+                  : "rgba(255,255,255,0.055)",
+                background: !activeCategory
+                  ? "rgba(249,115,22,0.1)"
+                  : "transparent",
+                color: !activeCategory ? "#F97316" : "#555570",
+                cursor: "pointer",
+                fontFamily: "inherit",
+                letterSpacing: 0.3,
+                transition: "all 0.15s",
+              }}
+            >
+              All
+            </button>
+            {categories.map((cat) => (
+              <button
+                key={cat.name}
+                onClick={() =>
+                  setActiveCategory(
+                    activeCategory === cat.name ? null : cat.name
+                  )
+                }
+                style={{
+                  padding: "5px 12px",
+                  fontSize: 11,
+                  borderRadius: 4,
+                  border: "1px solid",
+                  borderColor:
+                    activeCategory === cat.name
+                      ? `${cat.color}66`
+                      : "rgba(255,255,255,0.055)",
+                  background:
+                    activeCategory === cat.name
+                      ? `${cat.color}12`
+                      : "transparent",
+                  color:
+                    activeCategory === cat.name ? cat.color : "#555570",
+                  cursor: "pointer",
+                  fontFamily: "inherit",
+                  letterSpacing: 0.3,
+                  transition: "all 0.15s",
+                }}
+              >
+                <span style={{ marginRight: 4 }}>{cat.icon}</span>
+                {cat.name}
+                <span style={{ marginLeft: 4, opacity: 0.5 }}>
+                  {cat.concepts.length}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Body */}
+      <div
+        style={{ maxWidth: 960, margin: "0 auto", padding: "24px 32px 60px" }}
+      >
+        {displayCategories.map((cat) => (
+          <div key={cat.name} style={{ marginBottom: 32 }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                marginBottom: 12,
+                paddingBottom: 8,
+                borderBottom: `1px solid ${cat.color}16`,
+              }}
+            >
+              <span style={{ color: cat.color, fontSize: 16 }}>
+                {cat.icon}
+              </span>
+              <h2
+                style={{
+                  fontSize: 15,
+                  fontWeight: 600,
+                  color: cat.color,
+                  margin: 0,
+                  letterSpacing: 0.5,
+                  fontFamily: "'Sora', system-ui, sans-serif",
+                }}
+              >
+                {cat.name}
+              </h2>
+              <span
+                style={{
+                  fontSize: 10,
+                  color: "#333345",
+                  marginLeft: "auto",
+                }}
+              >
+                {cat.concepts.length} concepts
+              </span>
+            </div>
+
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: 4 }}
+            >
+              {cat.concepts.map((concept) => {
+                const isExpanded = expandedId === concept.id;
+                return (
+                  <div
+                    key={concept.id}
+                    onClick={() =>
+                      setExpandedId(isExpanded ? null : concept.id)
+                    }
+                    style={{
+                      padding: isExpanded ? "12px 16px" : "9px 16px",
+                      background: isExpanded
+                        ? `${cat.color}06`
+                        : "rgba(255,255,255,0.008)",
+                      border: "1px solid",
+                      borderColor: isExpanded
+                        ? `${cat.color}22`
+                        : "rgba(255,255,255,0.025)",
+                      borderRadius: 6,
+                      cursor: "pointer",
+                      transition: "all 0.15s ease",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 10,
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: 9,
+                          color: "#333345",
+                          minWidth: 24,
+                          fontVariantNumeric: "tabular-nums",
+                        }}
+                      >
+                        {String(concept.id).padStart(3, "0")}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 13,
+                          fontWeight: 500,
+                          color: isExpanded ? "#F2F2FF" : "#9898B0",
+                          flex: 1,
+                        }}
+                      >
+                        {concept.name}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 10,
+                          color: "#252535",
+                          transform: isExpanded
+                            ? "rotate(90deg)"
+                            : "none",
+                          transition: "transform 0.15s",
+                        }}
+                      >
+                        ▸
+                      </span>
+                    </div>
+                    {isExpanded && (
+                      <div
+                        style={{
+                          marginTop: 10,
+                          marginLeft: 34,
+                          fontSize: 12,
+                          lineHeight: 1.7,
+                          color: "#727290",
+                          borderLeft: `2px solid ${cat.color}24`,
+                          paddingLeft: 12,
+                        }}
+                      >
+                        {concept.desc}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

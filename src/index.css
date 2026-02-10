@@ -1,0 +1,15 @@
+:root {
+  color-scheme: dark;
+  color: #e6edf3;
+  background-color: #0d1117;
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  color: #58a6ff;
+}

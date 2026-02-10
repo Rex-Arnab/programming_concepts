@@ -1,0 +1,448 @@
+import { useState } from "react";
+
+export const meta = {
+  title: "AI Concepts",
+  description: "Artificial intelligence and machine learning fundamentals",
+};
+
+const categories = [
+  {
+    name: "Foundations",
+    icon: "◆",
+    color: "#A78BFA",
+    concepts: [
+      { id: 1, name: "Artificial Intelligence (AI)", desc: "Machines performing tasks that typically require human intelligence: reasoning, learning, perception, language understanding, decision-making. Narrow AI (specific tasks) vs General AI (human-level)." },
+      { id: 2, name: "Machine Learning (ML)", desc: "Subset of AI where systems learn from data instead of being explicitly programmed. Finds patterns in data to make predictions. Supervised, unsupervised, reinforcement learning." },
+      { id: 3, name: "Deep Learning (DL)", desc: "Subset of ML using neural networks with many layers. Learns hierarchical representations from data. Powers vision, language, speech. Requires large data and compute." },
+      { id: 4, name: "Neural Networks", desc: "Computational model inspired by biological neurons. Layers of connected nodes: input → hidden layers → output. Each connection has a learnable weight. Universal function approximators." },
+      { id: 5, name: "Supervised Learning", desc: "Learning from labeled data. Input-output pairs train the model. Classification (spam/not spam) and regression (predict price). Requires labeled dataset. Most common ML paradigm." },
+      { id: 6, name: "Unsupervised Learning", desc: "Learning patterns from unlabeled data. Clustering (group similar items), dimensionality reduction (compress features), anomaly detection. No ground truth labels needed." },
+      { id: 7, name: "Semi-Supervised Learning", desc: "Uses a small amount of labeled data with a large amount of unlabeled data. Pseudo-labeling, self-training, consistency regularization. Practical when labeling is expensive." },
+      { id: 8, name: "Self-Supervised Learning", desc: "Creates labels from the data itself. Masked language modeling (predict missing words), contrastive learning (learn representations). Powers GPT, BERT, CLIP. Scales with unlabeled data." },
+      { id: 9, name: "Reinforcement Learning (RL)", desc: "Agent learns by interacting with an environment. Actions → rewards/penalties. Maximizes cumulative reward. Q-learning, Policy Gradient, PPO. Games, robotics, RLHF." },
+      { id: 10, name: "Transfer Learning", desc: "Using a model trained on one task as starting point for another. Pre-train on large dataset, fine-tune on specific task. Foundation of modern AI. Saves compute and data." },
+      { id: 11, name: "Feature Engineering", desc: "Creating informative input features from raw data. Normalization, encoding categoricals, polynomial features, domain-specific transformations. Crucial for classical ML, less so for deep learning." },
+      { id: 12, name: "Training / Validation / Test Split", desc: "Divide data: training (learn), validation (tune hyperparameters), test (final evaluation). Typical: 80/10/10. Never tune on test set. Cross-validation for small datasets." },
+      { id: 13, name: "Overfitting vs Underfitting", desc: "Overfitting: model memorizes training data, fails on new data (high variance). Underfitting: model too simple to capture patterns (high bias). Balance with regularization and data." },
+      { id: 14, name: "Bias-Variance Tradeoff", desc: "Bias: error from oversimplified models. Variance: error from oversensitivity to training data. Reducing one increases the other. Find the sweet spot for best generalization." },
+      { id: 15, name: "Gradient Descent", desc: "Optimization algorithm minimizing loss by iteratively adjusting weights in the direction of steepest descent. Variants: SGD, Mini-batch, Adam, AdaGrad, RMSProp. Learning rate controls step size." },
+      { id: 16, name: "Backpropagation", desc: "Algorithm computing gradients of loss with respect to each weight using chain rule. Flows backward from output to input layers. Enables neural network training." },
+      { id: 17, name: "Loss Functions", desc: "Measures model error. Cross-entropy (classification), MSE/MAE (regression), contrastive loss (embeddings), focal loss (imbalanced data). The objective the model optimizes." },
+      { id: 18, name: "Hyperparameter Tuning", desc: "Optimizing settings not learned from data: learning rate, batch size, architecture choices. Grid search, random search, Bayesian optimization (Optuna), population-based training." },
+    ],
+  },
+  {
+    name: "Classical ML Algorithms",
+    icon: "⬡",
+    color: "#3B82F6",
+    concepts: [
+      { id: 19, name: "Linear Regression", desc: "Predict continuous values with a linear relationship. y = wx + b. Minimize sum of squared residuals. Assumptions: linearity, independence, homoscedasticity, normality." },
+      { id: 20, name: "Logistic Regression", desc: "Binary classification using sigmoid function. Despite the name, it's a classifier. Outputs probability (0–1). Interpretable coefficients. Baseline for classification tasks." },
+      { id: 21, name: "Decision Trees", desc: "Tree-structured model splitting data by feature thresholds. Information gain or Gini impurity for splits. Interpretable but prone to overfitting. Foundation for ensemble methods." },
+      { id: 22, name: "Random Forest", desc: "Ensemble of decision trees trained on random data subsets and feature subsets. Aggregates predictions (bagging). Reduces overfitting. Robust, handles mixed data types." },
+      { id: 23, name: "Gradient Boosting (XGBoost / LightGBM / CatBoost)", desc: "Sequentially builds trees, each correcting the previous one's errors. XGBoost: speed + regularization. LightGBM: leaf-wise growth. CatBoost: handles categoricals natively. Kaggle-winning algorithm." },
+      { id: 24, name: "Support Vector Machines (SVM)", desc: "Find the hyperplane maximizing margin between classes. Kernel trick for non-linear boundaries (RBF, polynomial). Effective in high dimensions. Less scalable to massive datasets." },
+      { id: 25, name: "K-Nearest Neighbors (KNN)", desc: "Classify by majority vote of K closest training examples. Distance-based (Euclidean, Manhattan). No training phase. Simple but slow at prediction time for large datasets." },
+      { id: 26, name: "Naive Bayes", desc: "Probabilistic classifier applying Bayes' theorem with feature independence assumption. Fast, effective for text classification. Gaussian, Multinomial, Bernoulli variants." },
+      { id: 27, name: "K-Means Clustering", desc: "Partition data into K clusters by minimizing within-cluster distances. Iterative: assign → update centroids → repeat. Must choose K. K-Means++, DBSCAN, HDBSCAN as alternatives." },
+      { id: 28, name: "Principal Component Analysis (PCA)", desc: "Dimensionality reduction finding directions of maximum variance. Projects data onto fewer dimensions. Decorrelates features. Useful for visualization and compression." },
+      { id: 29, name: "Ensemble Methods", desc: "Combining multiple models for better performance. Bagging (Random Forest): reduce variance. Boosting (XGBoost): reduce bias. Stacking: meta-learner on top of base models." },
+      { id: 30, name: "Anomaly Detection", desc: "Identifying unusual data points. Isolation Forest, One-Class SVM, autoencoders, statistical methods (Z-score). Fraud detection, system monitoring, quality control." },
+      { id: 31, name: "Time Series Forecasting", desc: "Predicting future values from sequential data. ARIMA, Prophet, exponential smoothing, LSTM, Temporal Fusion Transformers. Stationarity, seasonality, trend decomposition." },
+    ],
+  },
+  {
+    name: "Deep Learning Architectures",
+    icon: "⬢",
+    color: "#EC4899",
+    concepts: [
+      { id: 32, name: "Feedforward Neural Network (MLP)", desc: "Simplest neural network: data flows one direction through fully connected layers. Multi-Layer Perceptron. Activation functions: ReLU, sigmoid, tanh. Universal approximator." },
+      { id: 33, name: "Convolutional Neural Networks (CNN)", desc: "Specialized for spatial data (images). Convolutional layers learn local patterns (edges, textures). Pooling reduces dimensions. ResNet, VGG, EfficientNet architectures." },
+      { id: 34, name: "Recurrent Neural Networks (RNN)", desc: "Process sequential data with memory. Hidden state carries information across time steps. Vanishing gradient problem limits long sequences. Largely replaced by Transformers." },
+      { id: 35, name: "LSTM & GRU", desc: "LSTM: Long Short-Term Memory. Gates (forget, input, output) control information flow. GRU: simplified variant with fewer gates. Better than vanilla RNN for long sequences." },
+      { id: 36, name: "Transformer Architecture", desc: "Self-attention mechanism processes all positions simultaneously. No recurrence. Scales with parallel computation. Foundation of GPT, BERT, and all modern LLMs. 'Attention Is All You Need' (2017)." },
+      { id: 37, name: "Self-Attention Mechanism", desc: "Each token attends to all other tokens, learning relevance weights. Query, Key, Value matrices. Multi-head attention for different relationship types. O(n²) complexity." },
+      { id: 38, name: "Encoder-Decoder Architecture", desc: "Encoder processes input into representation, decoder generates output. Seq2seq: translation, summarization. T5, BART. Encoder-only: BERT. Decoder-only: GPT." },
+      { id: 39, name: "Autoencoder", desc: "Neural network that compresses data (encoder) and reconstructs it (decoder). Learns compressed representations. Variational Autoencoders (VAE) for generation. Denoising autoencoders." },
+      { id: 40, name: "Generative Adversarial Network (GAN)", desc: "Two networks: Generator creates fakes, Discriminator detects fakes. Adversarial training. StyleGAN for images. Training instability (mode collapse). Largely superseded by diffusion models." },
+      { id: 41, name: "Diffusion Models", desc: "Learn to denoise data step by step. Forward process adds noise, reverse process removes it. Stable Diffusion, DALL-E, Midjourney. Current state-of-art for image generation." },
+      { id: 42, name: "Graph Neural Networks (GNN)", desc: "Neural networks on graph-structured data. Message passing between connected nodes. Node classification, link prediction, graph classification. Social networks, molecules, knowledge graphs." },
+      { id: 43, name: "State Space Models (Mamba)", desc: "Alternative to Transformers for sequences. Linear complexity vs Transformer's quadratic. Selective state spaces. Mamba architecture. Promising for very long sequences." },
+      { id: 44, name: "Mixture of Experts (MoE)", desc: "Route inputs to specialized sub-networks (experts). Only activate a subset per input. Scales model capacity without proportional compute increase. Mixtral, Switch Transformer." },
+      { id: 45, name: "Neural Architecture Search (NAS)", desc: "Automatically discovering optimal network architectures. Reinforcement learning, evolutionary algorithms, one-shot methods. EfficientNet discovered via NAS." },
+    ],
+  },
+  {
+    name: "Large Language Models (LLMs)",
+    icon: "◈",
+    color: "#F97316",
+    concepts: [
+      { id: 46, name: "Large Language Models (LLMs)", desc: "Transformer-based models trained on massive text corpora. Predict next tokens. Emergent capabilities at scale: reasoning, coding, analysis. GPT-4, Claude, Gemini, Llama." },
+      { id: 47, name: "Tokenization", desc: "Converting text to numerical tokens. BPE (Byte Pair Encoding), WordPiece, SentencePiece. Subword tokenization balances vocabulary size and coverage. 1 token ≈ 0.75 English words." },
+      { id: 48, name: "Context Window", desc: "Maximum tokens an LLM can process at once. GPT-4: 128K, Claude: 200K, Gemini: 1M+. Longer context enables more information but increases cost and may reduce attention quality." },
+      { id: 49, name: "Pre-Training", desc: "Initial training on massive unlabeled text. Next-token prediction (causal LM) or masked language modeling. Requires enormous compute (thousands of GPUs, months). Creates base model." },
+      { id: 50, name: "Fine-Tuning", desc: "Adapting a pre-trained model to a specific task or domain with smaller labeled data. Full fine-tuning (all weights) or parameter-efficient methods (LoRA, QLoRA). Much cheaper than pre-training." },
+      { id: 51, name: "Instruction Tuning", desc: "Fine-tuning on instruction-response pairs to follow human commands. Makes base models conversational and helpful. FLAN, InstructGPT methodology. Bridges pre-training to usefulness." },
+      { id: 52, name: "RLHF (Reinforcement Learning from Human Feedback)", desc: "Training models to align with human preferences. Collect human comparisons → train reward model → optimize policy with PPO. Key to making LLMs helpful, harmless, honest." },
+      { id: 53, name: "DPO (Direct Preference Optimization)", desc: "Simpler alternative to RLHF. Directly optimizes policy from preference data without a separate reward model. Equivalent to RLHF under certain assumptions. Gaining popularity." },
+      { id: 54, name: "Constitutional AI (CAI)", desc: "Anthropic's approach: AI critiques and revises its own outputs using a set of principles (constitution). RLAIF — AI feedback instead of human feedback. Scalable alignment." },
+      { id: 55, name: "Prompt Engineering", desc: "Crafting inputs to get desired outputs. Zero-shot, few-shot examples, chain-of-thought, role-playing, system prompts. Crucial skill for working with LLMs effectively." },
+      { id: 56, name: "Chain-of-Thought (CoT) Prompting", desc: "Instructing the model to show reasoning steps before answering. 'Let's think step by step.' Dramatically improves math, logic, and complex reasoning performance." },
+      { id: 57, name: "Few-Shot / Zero-Shot / One-Shot Learning", desc: "Zero-shot: no examples. One-shot: one example. Few-shot: several examples in the prompt. Models learn task format from examples. In-context learning without parameter updates." },
+      { id: 58, name: "Temperature & Sampling", desc: "Temperature controls randomness: 0 = deterministic, 1 = creative. Top-k: sample from top K tokens. Top-p (nucleus): sample from tokens covering p probability mass. Greedy vs sampling." },
+      { id: 59, name: "System Prompts", desc: "Instructions defining the model's behavior, role, and constraints. Set personality, output format, safety guardrails. Persistent context for the conversation. Most LLM APIs support them." },
+      { id: 60, name: "Hallucination", desc: "Model generates confident but incorrect or fabricated information. Caused by pattern matching without true understanding. Mitigations: RAG, grounding, chain-of-thought, citation." },
+      { id: 61, name: "Reasoning Models", desc: "Models specifically trained for complex reasoning. Extended thinking, chain-of-thought at inference. OpenAI o1/o3, Claude with extended thinking. Better at math, coding, logic." },
+      { id: 62, name: "Multimodal LLMs", desc: "Models processing multiple data types: text + images (GPT-4V, Claude Vision), text + audio, text + video. Vision-language models understand and generate across modalities." },
+    ],
+  },
+  {
+    name: "RAG & Knowledge Systems",
+    icon: "⬣",
+    color: "#06B6D4",
+    concepts: [
+      { id: 63, name: "RAG (Retrieval-Augmented Generation)", desc: "Combine LLMs with external knowledge. Embed documents → store in vector DB → retrieve relevant chunks → pass as context to LLM. Reduces hallucination, grounds in facts." },
+      { id: 64, name: "Embeddings", desc: "Dense vector representations capturing semantic meaning. Words, sentences, or documents mapped to high-dimensional space. Similar meanings → close vectors. text-embedding-3, sentence-transformers." },
+      { id: 65, name: "Vector Databases", desc: "Store and search high-dimensional embeddings. Approximate Nearest Neighbor (ANN) search. Pinecone, Weaviate, Milvus, Chroma, Qdrant, pgvector. Foundation of RAG systems." },
+      { id: 66, name: "Similarity Search", desc: "Finding the most similar vectors to a query. Cosine similarity, Euclidean distance, dot product. ANN algorithms: HNSW, IVF, product quantization. Speed vs accuracy trade-off." },
+      { id: 67, name: "Chunking Strategies", desc: "Splitting documents into retrieval units. Fixed-size (512 tokens), semantic (by topic), recursive (split by hierarchy). Overlap between chunks preserves context. Chunk size affects quality." },
+      { id: 68, name: "Hybrid Search", desc: "Combining vector (semantic) search with keyword (BM25) search. Reciprocal Rank Fusion or weighted scoring to merge results. Better retrieval than either alone." },
+      { id: 69, name: "Re-Ranking", desc: "Second-stage ranking of retrieved documents by relevance. Cross-encoder models score query-document pairs. Cohere Rerank, ColBERT. More accurate than embedding similarity alone." },
+      { id: 70, name: "Knowledge Graphs", desc: "Structured representations: entities (nodes) and relationships (edges). Neo4j, Amazon Neptune. Graph RAG: combine structured knowledge with LLMs for richer reasoning." },
+      { id: 71, name: "Agentic RAG", desc: "AI agents that dynamically decide what to retrieve, when, and how. Multi-step retrieval, query reformulation, tool use. Beyond single-shot retrieve-and-generate." },
+      { id: 72, name: "Document Parsing & Extraction", desc: "Converting PDFs, images, tables into LLM-ready text. OCR, table extraction, layout detection. Unstructured, LlamaParse, Docling. Garbage in, garbage out for RAG." },
+      { id: 73, name: "Contextual Compression", desc: "Reducing retrieved context to only relevant portions. LLM-based extraction or summarization of chunks before final generation. Reduces noise and token cost." },
+      { id: 74, name: "Evaluation for RAG", desc: "Measuring RAG quality: retrieval relevance (precision@k, recall), generation faithfulness, answer correctness. RAGAS framework, LLM-as-judge. Context relevance vs answer relevance." },
+    ],
+  },
+  {
+    name: "AI Agents & Tool Use",
+    icon: "↯",
+    color: "#22C55E",
+    concepts: [
+      { id: 75, name: "AI Agents", desc: "Autonomous systems that perceive, reason, plan, and act. LLM as the brain, tools as hands. Observe → Think → Act → Observe loop. Multi-step task completion." },
+      { id: 76, name: "Tool Use / Function Calling", desc: "LLMs invoking external tools: APIs, databases, calculators, search engines, code execution. Model decides which tool, generates parameters, processes results." },
+      { id: 77, name: "ReAct Pattern", desc: "Reasoning + Acting interleaved. Model thinks about what to do (Thought), takes action (Act), observes result (Observation), repeats. Structured agent loop." },
+      { id: 78, name: "Planning & Decomposition", desc: "Breaking complex tasks into subtasks. Task decomposition, hierarchical planning, Plan-and-Solve. LLM creates plan, executes steps, adapts based on results." },
+      { id: 79, name: "Multi-Agent Systems", desc: "Multiple AI agents collaborating or competing. Specialized agents for different roles (researcher, coder, reviewer). CrewAI, AutoGen, LangGraph. Communication protocols between agents." },
+      { id: 80, name: "MCP (Model Context Protocol)", desc: "Anthropic's open protocol for connecting AI agents to data sources and tools. Standardized interface for tool integration. Servers expose capabilities, clients consume them." },
+      { id: 81, name: "Memory in Agents", desc: "Short-term (conversation context), working (current task state), long-term (persistent knowledge). Vector stores for episodic memory. Summary memory for compression." },
+      { id: 82, name: "Code Generation & Execution", desc: "LLMs writing and running code to solve problems. Claude Code, GitHub Copilot, Cursor. Code interpreters for data analysis. Sandbox execution for safety." },
+      { id: 83, name: "Web Browsing Agents", desc: "AI agents navigating and interacting with websites. Click, type, read, extract data. Computer use, Playwright automation, visual understanding. Claude computer use." },
+      { id: 84, name: "Agentic Workflows", desc: "Multi-step processes orchestrated by AI: research → analyze → draft → review → revise. LangGraph, CrewAI, custom pipelines. Human-in-the-loop at decision points." },
+      { id: 85, name: "Guardrails & Safety", desc: "Constraining agent behavior: output validation, tool permission scoping, budget limits, human approval gates, content filtering. Prevent unintended actions or harmful outputs." },
+      { id: 86, name: "Evaluation for Agents", desc: "Measuring agent performance: task completion rate, efficiency (steps taken), cost, safety violations. Benchmarks: SWE-bench (coding), WebArena (browsing), GAIA (general)." },
+    ],
+  },
+  {
+    name: "Computer Vision",
+    icon: "⊞",
+    color: "#EF4444",
+    concepts: [
+      { id: 87, name: "Image Classification", desc: "Assigning a label to an entire image. ResNet, EfficientNet, Vision Transformer (ViT). ImageNet benchmark. Transfer learning from pre-trained models is standard." },
+      { id: 88, name: "Object Detection", desc: "Locating and classifying objects with bounding boxes. YOLO (real-time), Faster R-CNN, DETR (Transformer-based). COCO benchmark. Self-driving, surveillance, retail." },
+      { id: 89, name: "Image Segmentation", desc: "Pixel-level classification. Semantic (class per pixel), instance (distinguish objects), panoptic (both). U-Net, Mask R-CNN, SAM (Segment Anything Model by Meta)." },
+      { id: 90, name: "Vision Transformers (ViT)", desc: "Applying Transformer architecture to images. Split image into patches, treat as tokens. Scales better than CNNs with more data. DINOv2, SigLIP for visual features." },
+      { id: 91, name: "Image Generation", desc: "Creating images from text or other inputs. Diffusion models (Stable Diffusion, DALL-E 3, Midjourney), GANs (StyleGAN). Inpainting, outpainting, style transfer." },
+      { id: 92, name: "Video Understanding", desc: "Analyzing video content: action recognition, video captioning, temporal segmentation. 3D CNNs, Video Transformers, SlowFast networks. Much harder than single images." },
+      { id: 93, name: "Optical Character Recognition (OCR)", desc: "Extracting text from images/documents. Tesseract, PaddleOCR, cloud APIs. Table extraction, handwriting recognition. Foundation for document AI and digitization." },
+      { id: 94, name: "3D Vision & Reconstruction", desc: "Understanding 3D structure from 2D images. Depth estimation, NeRF (Neural Radiance Fields), Gaussian splatting, point clouds. AR/VR, robotics, autonomous driving." },
+      { id: 95, name: "CLIP / Contrastive Learning", desc: "Learning visual concepts from natural language. CLIP, SigLIP: align images and text in shared embedding space. Zero-shot classification. Foundation of multimodal AI." },
+      { id: 96, name: "Data Augmentation (Vision)", desc: "Expanding training data via transformations: rotation, flipping, cropping, color jitter, mixup, cutout, RandAugment. Prevents overfitting. Critical for limited datasets." },
+    ],
+  },
+  {
+    name: "NLP & Speech",
+    icon: "⟐",
+    color: "#8B5CF6",
+    concepts: [
+      { id: 97, name: "Natural Language Processing (NLP)", desc: "AI understanding and generating human language. Tokenization, parsing, sentiment analysis, NER, translation, summarization, question answering. Transformed by LLMs." },
+      { id: 98, name: "Named Entity Recognition (NER)", desc: "Identifying entities in text: person, organization, location, date, money. SpaCy, Flair, Transformer-based. Information extraction, knowledge graph construction." },
+      { id: 99, name: "Sentiment Analysis", desc: "Determining emotional tone: positive, negative, neutral. Aspect-based sentiment for specific features. Review analysis, social media monitoring, brand tracking." },
+      { id: 100, name: "Text Classification", desc: "Assigning categories to text: spam detection, topic classification, intent recognition. Fine-tuned BERT, zero-shot with LLMs. Embeddings + classifier for production." },
+      { id: 101, name: "Machine Translation", desc: "Translating between languages. Encoder-decoder Transformers. Google Translate, DeepL. Challenges: idioms, context, low-resource languages. mBART, NLLB for multilingual." },
+      { id: 102, name: "Text Summarization", desc: "Extractive (select key sentences) or abstractive (generate new text). Transformer models, LLM prompting. ROUGE metric for evaluation. Long document summarization." },
+      { id: 103, name: "Question Answering", desc: "Extractive (find answer span in text) or generative (produce answer). SQuAD benchmark. RAG for open-domain QA. Reading comprehension meets information retrieval." },
+      { id: 104, name: "Word Embeddings (Word2Vec / GloVe)", desc: "Dense vector representations of words. Word2Vec (skip-gram, CBOW), GloVe (co-occurrence). King - Man + Woman ≈ Queen. Foundation for modern embeddings." },
+      { id: 105, name: "BERT & Encoder Models", desc: "Bidirectional Transformer encoder. Masked language modeling + next sentence prediction. Pre-train then fine-tune. Excels at classification, NER, similarity. RoBERTa, DeBERTa variants." },
+      { id: 106, name: "Speech-to-Text (ASR)", desc: "Converting spoken audio to text. Whisper (OpenAI), DeepSpeech. Handles accents, noise, multiple speakers. Real-time streaming vs batch transcription." },
+      { id: 107, name: "Text-to-Speech (TTS)", desc: "Generating natural-sounding speech from text. Tacotron, VITS, Bark, ElevenLabs. Voice cloning, emotion control, multilingual. Increasingly indistinguishable from human speech." },
+      { id: 108, name: "Audio Understanding", desc: "Beyond speech: music classification, sound event detection, audio captioning, speaker diarization. Audio Transformers, spectrogram-based CNNs. Whisper handles many audio tasks." },
+    ],
+  },
+  {
+    name: "Model Optimization & Deployment",
+    icon: "⟡",
+    color: "#F59E0B",
+    concepts: [
+      { id: 109, name: "Model Quantization", desc: "Reducing model precision: FP32 → FP16 → INT8 → INT4. Smaller models, faster inference, lower memory. GPTQ, AWQ, GGUF formats. 4-bit quantization retains most quality." },
+      { id: 110, name: "Knowledge Distillation", desc: "Training a smaller 'student' model to mimic a larger 'teacher'. Compress knowledge into efficient models. DistilBERT, TinyLlama. Trade quality for speed and size." },
+      { id: 111, name: "Pruning", desc: "Removing unnecessary weights or neurons. Structured (remove layers/heads) or unstructured (individual weights). Reduces size and compute with minimal quality loss." },
+      { id: 112, name: "LoRA / QLoRA (Parameter-Efficient Fine-Tuning)", desc: "Low-Rank Adaptation: inject small trainable matrices into frozen model. Train <1% of parameters. QLoRA: LoRA on quantized base. Makes fine-tuning affordable on consumer GPUs." },
+      { id: 113, name: "PEFT Methods", desc: "Parameter-Efficient Fine-Tuning beyond LoRA: adapters, prefix tuning, prompt tuning, IA3. Train few parameters while keeping base model frozen. HuggingFace PEFT library." },
+      { id: 114, name: "Model Serving", desc: "Deploying models for inference at scale. vLLM, TGI (Text Generation Inference), TensorRT-LLM, Triton Inference Server, Ollama. Batching, KV-cache, continuous batching." },
+      { id: 115, name: "ONNX Runtime", desc: "Cross-platform inference engine. Convert models from PyTorch/TensorFlow to ONNX format. Hardware-optimized execution on CPU, GPU, edge devices." },
+      { id: 116, name: "Speculative Decoding", desc: "Use a small draft model to predict multiple tokens, large model verifies in parallel. 2-3x speedup for LLM inference. No quality loss — same output distribution." },
+      { id: 117, name: "KV-Cache", desc: "Caching key-value attention states from previous tokens. Avoids recomputing during autoregressive generation. Memory-intensive but essential for fast LLM inference." },
+      { id: 118, name: "Batching & Continuous Batching", desc: "Processing multiple requests simultaneously. Static batching wastes compute on padding. Continuous batching (vLLM) adds new requests as others finish. Maximizes GPU utilization." },
+      { id: 119, name: "Edge AI / On-Device Inference", desc: "Running models on phones, IoT, browsers. TensorFlow Lite, Core ML, ONNX Runtime Mobile, WebLLM. Quantized models. Privacy-preserving, low-latency, offline-capable." },
+      { id: 120, name: "Model Compression", desc: "Umbrella term: quantization + pruning + distillation + architecture optimization. Make models smaller and faster for production. Balance quality vs efficiency." },
+    ],
+  },
+  {
+    name: "MLOps & Infrastructure",
+    icon: "◎",
+    color: "#10B981",
+    concepts: [
+      { id: 121, name: "MLOps", desc: "DevOps practices for ML: automated training pipelines, model versioning, monitoring, deployment. Bridge between data science experiments and production systems." },
+      { id: 122, name: "Experiment Tracking", desc: "Logging hyperparameters, metrics, artifacts, and code for reproducibility. MLflow, Weights & Biases (W&B), Neptune, Comet. Compare runs, share results." },
+      { id: 123, name: "Model Registry", desc: "Centralized store for trained models with versioning, staging (dev/staging/prod), metadata, and lineage. MLflow Model Registry, HuggingFace Hub, SageMaker Registry." },
+      { id: 124, name: "Feature Store", desc: "Centralized repository for ML features. Consistent features between training and serving. Online (real-time) and offline (batch) serving. Feast, Tecton, Databricks." },
+      { id: 125, name: "Training Pipelines", desc: "Automated workflows: data ingestion → preprocessing → training → evaluation → registration. Kubeflow, SageMaker Pipelines, Vertex AI, ZenML. Reproducible and versioned." },
+      { id: 126, name: "Data Versioning", desc: "Tracking dataset changes over time. DVC (Data Version Control), LakeFS, Delta Lake. Reproduce any training run with exact data snapshot." },
+      { id: 127, name: "Model Monitoring", desc: "Tracking model performance in production. Data drift (input distribution changes), concept drift (relationship changes), performance degradation. Trigger retraining alerts." },
+      { id: 128, name: "A/B Testing for Models", desc: "Comparing model versions with real traffic. Shadow mode (run both, serve one), champion/challenger. Statistical significance testing. Gradual rollout based on metrics." },
+      { id: 129, name: "GPU Infrastructure", desc: "NVIDIA A100, H100, H200 GPUs. Multi-GPU training (data parallel, tensor parallel, pipeline parallel). Cloud: AWS, GCP, Azure, Lambda Labs, CoreWeave. Cost optimization critical." },
+      { id: 130, name: "Distributed Training", desc: "Training across multiple GPUs/machines. Data parallelism (split batches), model parallelism (split layers), pipeline parallelism (split stages). DeepSpeed, FSDP, Megatron-LM." },
+      { id: 131, name: "Compute Optimization", desc: "Mixed precision training (FP16/BF16), gradient checkpointing (trade compute for memory), flash attention (efficient attention), compiled models (torch.compile)." },
+      { id: 132, name: "HuggingFace Ecosystem", desc: "Hub (model/dataset hosting), Transformers (model library), Datasets, Tokenizers, PEFT, TRL, Accelerate, Spaces. De facto open-source AI platform." },
+    ],
+  },
+  {
+    name: "AI Safety & Ethics",
+    icon: "⬟",
+    color: "#EF4444",
+    concepts: [
+      { id: 133, name: "AI Alignment", desc: "Ensuring AI systems act in accordance with human values and intentions. The core challenge: how to specify and verify that AI does what we actually want." },
+      { id: 134, name: "Bias & Fairness", desc: "AI models can perpetuate or amplify societal biases from training data. Gender, racial, socioeconomic biases. Fairness metrics, debiasing techniques, diverse datasets." },
+      { id: 135, name: "Hallucination Mitigation", desc: "Reducing false confident outputs. Grounding in retrieved data (RAG), chain-of-thought reasoning, confidence calibration, citation generation, human verification." },
+      { id: 136, name: "Red Teaming", desc: "Adversarially testing AI systems to find vulnerabilities: jailbreaks, harmful outputs, bias, privacy leaks. Systematic probing by security researchers. Essential before deployment." },
+      { id: 137, name: "Prompt Injection", desc: "Attackers insert malicious instructions into LLM inputs. Direct (user input) or indirect (data sources). Hijack behavior, leak system prompts, bypass safety. Defense-in-depth needed." },
+      { id: 138, name: "AI Governance & Regulation", desc: "EU AI Act, NIST AI RMF, Executive Orders, industry standards. Risk classification, transparency requirements, mandatory assessments for high-risk applications." },
+      { id: 139, name: "Explainability & Interpretability", desc: "Understanding why models make decisions. SHAP, LIME, attention visualization, feature importance. Critical for healthcare, finance, legal. Black box vs interpretable models." },
+      { id: 140, name: "Data Privacy in AI", desc: "Federated learning (train without sharing data), differential privacy (add noise), data anonymization. GDPR right to deletion complicates model training. PII in training data." },
+      { id: 141, name: "Responsible AI", desc: "Developing AI with fairness, transparency, accountability, privacy, and safety as core principles. Model cards, datasheets for datasets, impact assessments. Ethical by design." },
+      { id: 142, name: "Existential Risk (AI Safety)", desc: "Concerns about advanced AI systems posing catastrophic risks. Superintelligence alignment, misuse, power concentration. Anthropic, OpenAI safety research. Active academic and policy debate." },
+      { id: 143, name: "Deepfakes & Misinformation", desc: "AI-generated synthetic media: face swaps, voice cloning, fake text. Detection methods: watermarking (C2PA), artifact analysis, provenance tracking. Growing societal concern." },
+      { id: 144, name: "Copyright & AI Training Data", desc: "Legal debates around training on copyrighted data. Fair use, opt-out mechanisms, data licensing. NYT vs OpenAI, Getty vs Stability AI. Evolving legal landscape." },
+    ],
+  },
+  {
+    name: "Evaluation & Metrics",
+    icon: "⛉",
+    color: "#0EA5E9",
+    concepts: [
+      { id: 145, name: "Accuracy, Precision, Recall, F1", desc: "Accuracy: correct predictions / total. Precision: true positives / predicted positives. Recall: true positives / actual positives. F1: harmonic mean of precision and recall." },
+      { id: 146, name: "Confusion Matrix", desc: "Table of True Positives, True Negatives, False Positives, False Negatives. Visualizes classification performance. Reveals where the model confuses classes." },
+      { id: 147, name: "AUC-ROC Curve", desc: "Area Under the Receiver Operating Characteristic curve. Plots True Positive Rate vs False Positive Rate. AUC = 1.0 is perfect, 0.5 is random. Threshold-independent metric." },
+      { id: 148, name: "Cross-Validation", desc: "K-Fold: split data into K parts, train on K-1, validate on 1, rotate K times. Robust performance estimate. Stratified for imbalanced classes. Standard: 5 or 10 folds." },
+      { id: 149, name: "Perplexity", desc: "Language model metric: how 'surprised' the model is by text. Lower = better predictions. Exponential of cross-entropy loss. Standard LLM pre-training metric." },
+      { id: 150, name: "BLEU / ROUGE / METEOR", desc: "Text generation metrics. BLEU: precision-based (translation). ROUGE: recall-based (summarization). METEOR: considers synonyms. Imperfect but widely used baselines." },
+      { id: 151, name: "LLM-as-Judge", desc: "Using a strong LLM to evaluate outputs of another model. Pairwise comparison, scoring rubrics, multi-aspect evaluation. Scales evaluation but introduces its own biases." },
+      { id: 152, name: "Human Evaluation", desc: "Human raters judge quality: fluency, helpfulness, harmlessness, factuality. Chatbot Arena, Elo ratings. Gold standard but expensive and subjective. Inter-annotator agreement." },
+      { id: 153, name: "Benchmark Suites", desc: "Standardized tests: MMLU (knowledge), HumanEval (coding), GSM8K (math), HellaSwag (commonsense), MT-Bench (conversation). Limitations: contamination, Goodhart's law." },
+      { id: 154, name: "Evals for Production", desc: "Beyond benchmarks: task-specific evaluation, A/B testing, user satisfaction, latency, cost per query, error rate monitoring. Continuous evaluation in deployment." },
+    ],
+  },
+  {
+    name: "Building AI Applications",
+    icon: "◉",
+    color: "#F43F5E",
+    concepts: [
+      { id: 155, name: "LLM API Integration", desc: "Calling LLM providers: OpenAI, Anthropic, Google, Mistral, Cohere APIs. Messages format, streaming responses, function calling, vision inputs. SDKs for every language." },
+      { id: 156, name: "LangChain / LlamaIndex", desc: "Frameworks for building LLM applications. LangChain: chains, agents, tools, memory. LlamaIndex: data indexing and querying. Abstractions over common patterns." },
+      { id: 157, name: "Structured Output", desc: "Forcing LLMs to output valid JSON, XML, or specific schemas. JSON mode, tool calling, Pydantic models (Instructor library). Essential for programmatic LLM integration." },
+      { id: 158, name: "Streaming Responses", desc: "Sending LLM output token-by-token as generated. Server-Sent Events (SSE), WebSocket. Reduces perceived latency. Users see text appearing in real-time." },
+      { id: 159, name: "Prompt Management", desc: "Version-controlling, testing, and managing prompts. Prompt templates, A/B testing prompts, prompt registries. LangSmith, Promptfoo, Braintrust for prompt ops." },
+      { id: 160, name: "Caching LLM Responses", desc: "Cache identical or similar queries to reduce cost and latency. Exact match caching, semantic caching (similar embeddings). Redis, GPTCache. 10-100x cost reduction." },
+      { id: 161, name: "Cost Optimization", desc: "Reduce LLM costs: prompt compression, model routing (cheap model first, expensive as fallback), caching, batching, smaller models for simple tasks. Monitor cost per query." },
+      { id: 162, name: "Observability for AI", desc: "Tracing LLM calls: input/output, latency, token usage, cost, tool calls. LangSmith, Langfuse, Helicone, Arize. Debug chains, identify failures, optimize prompts." },
+      { id: 163, name: "AI Gateway / Router", desc: "Proxy for LLM API calls. Load balancing across providers, fallback routing, caching, rate limiting, logging. LiteLLM, Portkey, Martian. Provider abstraction layer." },
+      { id: 164, name: "Chatbot / Conversational AI", desc: "Building chat interfaces powered by LLMs. Conversation history management, context windowing, persona design, guardrails, feedback collection. Vercel AI SDK, Chainlit." },
+      { id: 165, name: "Semantic Search", desc: "Search by meaning, not keywords. Embed query and documents, find closest vectors. Hybrid with keyword search. Powers modern search experiences. Much better than TF-IDF." },
+    ],
+  },
+  {
+    name: "Advanced & Frontier",
+    icon: "✦",
+    color: "#D946EF",
+    concepts: [
+      { id: 166, name: "Synthetic Data Generation", desc: "Using AI to create training data. LLMs generate labeled examples, diffusion models create images. Self-Instruct, Evol-Instruct. Addresses data scarcity and privacy." },
+      { id: 167, name: "Multimodal AI", desc: "Models processing and generating across modalities: text, images, audio, video, 3D. GPT-4o, Gemini, unified architectures. 'Any-to-any' generation emerging." },
+      { id: 168, name: "World Models", desc: "AI that builds internal representations of how the world works. Predicts consequences of actions. Sora (video), GAIA-1 (driving). Step toward general intelligence." },
+      { id: 169, name: "Continual / Lifelong Learning", desc: "Learning new tasks without forgetting old ones. Catastrophic forgetting is the core challenge. Elastic Weight Consolidation, progressive networks. Active research area." },
+      { id: 170, name: "AI for Science", desc: "AI accelerating scientific discovery: protein folding (AlphaFold), drug discovery, materials science, climate modeling, mathematical proofs. New paradigm for research." },
+      { id: 171, name: "Robotics & Embodied AI", desc: "AI controlling physical robots. Foundation models for robotics (RT-2), sim-to-real transfer, manipulation, locomotion. Physical intelligence as the next frontier." },
+      { id: 172, name: "Autonomous Driving", desc: "Self-driving systems: perception (cameras, LiDAR), prediction, planning, control. Levels 1–5 autonomy. Tesla, Waymo, Cruise. End-to-end learning vs modular pipelines." },
+      { id: 173, name: "Neuro-Symbolic AI", desc: "Combining neural networks (pattern recognition) with symbolic AI (logic, rules, reasoning). Potential for more robust, interpretable, and data-efficient systems." },
+      { id: 174, name: "Open-Source vs Proprietary Models", desc: "Open: Llama, Mistral, Qwen, Gemma — free weights, community innovation. Proprietary: GPT-4, Claude, Gemini — leading performance, API-only. Both ecosystems thriving." },
+      { id: 175, name: "Scaling Laws", desc: "Predictable relationship between model size, data, compute, and performance. Chinchilla scaling: balance parameters and training tokens. Guides training investment decisions." },
+      { id: 176, name: "Test-Time Compute", desc: "Spending more compute during inference for better results. Chain-of-thought, self-consistency, tree-of-thought, beam search, verifier models. Quality scales with inference budget." },
+      { id: 177, name: "Model Merging", desc: "Combining multiple fine-tuned models without retraining. SLERP, TIES, DARE methods. Merge specialists into generalists. Popular in open-source community. MergeKit." },
+      { id: 178, name: "Small Language Models (SLMs)", desc: "Compact but capable models: Phi, Gemma, Qwen2.5. 1–7B parameters. On-device, private, fast, cheap. Increasingly competitive for specific tasks. The efficient frontier." },
+      { id: 179, name: "AI Compute Economics", desc: "Training costs ($10M–$1B for frontier models), inference costs (tokens per dollar), GPU shortage, custom chips (TPU, Trainium, Groq). Cloud vs on-premise tradeoffs." },
+      { id: 180, name: "AGI & Superintelligence", desc: "Artificial General Intelligence: human-level across all cognitive tasks. Superintelligence: surpassing human intelligence. Timeline debate: years vs decades. Motivates safety research." },
+    ],
+  },
+];
+
+const totalConcepts = categories.reduce((sum, c) => sum + c.concepts.length, 0);
+
+export default function AIConcepts() {
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [search, setSearch] = useState("");
+  const [expandedId, setExpandedId] = useState(null);
+
+  const filteredCategories = categories
+    .map((cat) => ({
+      ...cat,
+      concepts: cat.concepts.filter(
+        (c) =>
+          c.name.toLowerCase().includes(search.toLowerCase()) ||
+          c.desc.toLowerCase().includes(search.toLowerCase())
+      ),
+    }))
+    .filter((cat) => cat.concepts.length > 0);
+
+  const displayCategories = activeCategory
+    ? filteredCategories.filter((c) => c.name === activeCategory)
+    : filteredCategories;
+
+  const matchCount = filteredCategories.reduce(
+    (sum, c) => sum + c.concepts.length,
+    0
+  );
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#030306",
+        color: "#C0C0D8",
+        fontFamily: "'Berkeley Mono', 'JetBrains Mono', 'Fira Code', monospace",
+      }}
+    >
+      <div
+        style={{
+          padding: "40px 32px 24px",
+          borderBottom: "1px solid rgba(255,255,255,0.03)",
+          background: "linear-gradient(180deg, rgba(167,139,250,0.045) 0%, rgba(236,72,153,0.02) 50%, transparent 100%)",
+        }}
+      >
+        <div style={{ maxWidth: 960, margin: "0 auto" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
+            <span style={{ fontSize: 11, letterSpacing: 4, textTransform: "uppercase", color: "#A78BFA", fontWeight: 600 }}>
+              Reference Guide
+            </span>
+            <span style={{ fontSize: 10, background: "rgba(167,139,250,0.1)", color: "#A78BFA", padding: "2px 8px", borderRadius: 3, letterSpacing: 1 }}>
+              {totalConcepts} CONCEPTS
+            </span>
+          </div>
+          <h1 style={{ fontSize: 28, fontWeight: 700, margin: "8px 0 6px", color: "#F2F0FF", letterSpacing: -0.5, fontFamily: "'Satoshi', 'General Sans', system-ui, sans-serif" }}>
+            Artificial Intelligence Concepts
+          </h1>
+          <p style={{ fontSize: 13, color: "#454560", margin: 0, lineHeight: 1.5 }}>
+            From neural networks to AGI — the complete AI & machine learning reference
+          </p>
+
+          <div style={{ marginTop: 20, position: "relative" }}>
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search concepts..."
+              style={{
+                width: "100%", padding: "10px 16px 10px 36px",
+                background: "rgba(255,255,255,0.018)", border: "1px solid rgba(255,255,255,0.04)",
+                borderRadius: 8, color: "#C0C0D8", fontSize: 13, fontFamily: "inherit", outline: "none", boxSizing: "border-box",
+              }}
+            />
+            <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "#2A2A3E", fontSize: 14 }}>⌕</span>
+            {search && (
+              <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", color: "#454560", fontSize: 11 }}>
+                {matchCount} results
+              </span>
+            )}
+          </div>
+
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 16 }}>
+            <button
+              onClick={() => setActiveCategory(null)}
+              style={{
+                padding: "5px 12px", fontSize: 11, borderRadius: 4, border: "1px solid",
+                borderColor: !activeCategory ? "rgba(167,139,250,0.4)" : "rgba(255,255,255,0.04)",
+                background: !activeCategory ? "rgba(167,139,250,0.08)" : "transparent",
+                color: !activeCategory ? "#A78BFA" : "#454560",
+                cursor: "pointer", fontFamily: "inherit", letterSpacing: 0.3, transition: "all 0.15s",
+              }}
+            >All</button>
+            {categories.map((cat) => (
+              <button
+                key={cat.name}
+                onClick={() => setActiveCategory(activeCategory === cat.name ? null : cat.name)}
+                style={{
+                  padding: "5px 12px", fontSize: 11, borderRadius: 4, border: "1px solid",
+                  borderColor: activeCategory === cat.name ? `${cat.color}66` : "rgba(255,255,255,0.04)",
+                  background: activeCategory === cat.name ? `${cat.color}0E` : "transparent",
+                  color: activeCategory === cat.name ? cat.color : "#454560",
+                  cursor: "pointer", fontFamily: "inherit", letterSpacing: 0.3, transition: "all 0.15s",
+                }}
+              >
+                <span style={{ marginRight: 4 }}>{cat.icon}</span>
+                {cat.name}
+                <span style={{ marginLeft: 4, opacity: 0.5 }}>{cat.concepts.length}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 960, margin: "0 auto", padding: "24px 32px 60px" }}>
+        {displayCategories.map((cat) => (
+          <div key={cat.name} style={{ marginBottom: 32 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, paddingBottom: 8, borderBottom: `1px solid ${cat.color}12` }}>
+              <span style={{ color: cat.color, fontSize: 16 }}>{cat.icon}</span>
+              <h2 style={{ fontSize: 15, fontWeight: 600, color: cat.color, margin: 0, letterSpacing: 0.5, fontFamily: "'Satoshi', system-ui, sans-serif" }}>
+                {cat.name}
+              </h2>
+              <span style={{ fontSize: 10, color: "#242436", marginLeft: "auto" }}>{cat.concepts.length} concepts</span>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+              {cat.concepts.map((concept) => {
+                const isExpanded = expandedId === concept.id;
+                return (
+                  <div
+                    key={concept.id}
+                    onClick={() => setExpandedId(isExpanded ? null : concept.id)}
+                    style={{
+                      padding: isExpanded ? "12px 16px" : "9px 16px",
+                      background: isExpanded ? `${cat.color}05` : "rgba(255,255,255,0.005)",
+                      border: "1px solid",
+                      borderColor: isExpanded ? `${cat.color}1C` : "rgba(255,255,255,0.018)",
+                      borderRadius: 6, cursor: "pointer", transition: "all 0.15s ease",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <span style={{ fontSize: 9, color: "#242436", minWidth: 24, fontVariantNumeric: "tabular-nums" }}>
+                        {String(concept.id).padStart(3, "0")}
+                      </span>
+                      <span style={{ fontSize: 13, fontWeight: 500, color: isExpanded ? "#F2F0FF" : "#8585A0", flex: 1 }}>
+                        {concept.name}
+                      </span>
+                      <span style={{ fontSize: 10, color: "#1A1A2C", transform: isExpanded ? "rotate(90deg)" : "none", transition: "transform 0.15s" }}>▸</span>
+                    </div>
+                    {isExpanded && (
+                      <div style={{ marginTop: 10, marginLeft: 34, fontSize: 12, lineHeight: 1.7, color: "#626282", borderLeft: `2px solid ${cat.color}1C`, paddingLeft: 12 }}>
+                        {concept.desc}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

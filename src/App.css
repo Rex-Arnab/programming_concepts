@@ -1,0 +1,52 @@
+.home {
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.concept-list {
+  list-style: none;
+  padding: 0;
+}
+
+.concept-list li {
+  margin: 0.75rem 0;
+}
+
+.concept-list a {
+  text-decoration: none;
+  color: #58a6ff;
+}
+
+.concept-list a:hover {
+  text-decoration: underline;
+}
+
+.concept-page {
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #58a6ff;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+pre {
+  background: #161b22;
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+code {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+}

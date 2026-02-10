@@ -1,0 +1,436 @@
+import { useState } from "react";
+
+export const meta = {
+  title: "Backend Concepts",
+  description: "Backend development fundamentals and architecture patterns",
+};
+
+const categories = [
+  {
+    name: "Core Fundamentals",
+    icon: "◆",
+    color: "#22C55E",
+    concepts: [
+      { id: 1, name: "Backend Architecture", desc: "Server-side layer handling business logic, data processing, authentication, and API delivery. Receives requests, processes them, interacts with databases, and returns responses." },
+      { id: 2, name: "Client-Server Model", desc: "Clients send requests, servers process and respond. Stateless (HTTP) or stateful (WebSocket). Request-response cycle: DNS → TCP → TLS → HTTP → process → response." },
+      { id: 3, name: "Request-Response Lifecycle", desc: "Client sends HTTP request → DNS resolution → load balancer → web server → middleware → route handler → business logic → database → serialize response → send back." },
+      { id: 4, name: "MVC Pattern", desc: "Model-View-Controller: Model (data/business logic), View (presentation), Controller (request handling/routing). Rails, Django, Laravel, Spring MVC. Classic backend pattern." },
+      { id: 5, name: "MVVM / MVP", desc: "MVVM: Model-View-ViewModel (data binding). MVP: Model-View-Presenter (presenter mediates). Common in mobile backends and thick-client architectures." },
+      { id: 6, name: "Layered Architecture", desc: "Presentation → Business Logic → Data Access → Database. Each layer only communicates with adjacent layers. Separation of concerns. Most common backend structure." },
+      { id: 7, name: "Clean Architecture", desc: "Dependency rule: outer layers depend on inner layers, never reverse. Entities → Use Cases → Interface Adapters → Frameworks. Framework-independent, testable." },
+      { id: 8, name: "Hexagonal Architecture (Ports & Adapters)", desc: "Core business logic surrounded by ports (interfaces) and adapters (implementations). Swap databases, APIs, or UIs without touching core logic. Highly testable." },
+      { id: 9, name: "Domain-Driven Design (DDD)", desc: "Modeling software around the business domain. Bounded contexts, entities, value objects, aggregates, repositories, domain events. Ubiquitous language shared with stakeholders." },
+      { id: 10, name: "SOLID Principles", desc: "Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion. Foundation of maintainable object-oriented backend code." },
+      { id: 11, name: "12-Factor App", desc: "Methodology for building SaaS: codebase, dependencies, config, backing services, build/release/run, processes, port binding, concurrency, disposability, dev/prod parity, logs, admin." },
+      { id: 12, name: "Dependency Injection (DI)", desc: "Passing dependencies into a class rather than creating them internally. Inversion of Control. Enables testing with mocks. Built into Spring, NestJS, Angular." },
+      { id: 13, name: "Middleware", desc: "Functions that process requests between receiving and responding. Auth checks, logging, CORS, rate limiting, body parsing. Composable pipeline: req → mw1 → mw2 → handler." },
+    ],
+  },
+  {
+    name: "Languages & Runtimes",
+    icon: "⬡",
+    color: "#3B82F6",
+    concepts: [
+      { id: 14, name: "Node.js", desc: "JavaScript runtime built on V8. Event-driven, non-blocking I/O. Single-threaded event loop. Express, Fastify, NestJS, Hono. Massive npm ecosystem. Full-stack JS." },
+      { id: 15, name: "Python", desc: "Versatile language for backends. Django (batteries-included), Flask (micro), FastAPI (async, typed). Strong in ML/data pipelines. GIL limits true parallelism." },
+      { id: 16, name: "Go (Golang)", desc: "Compiled, statically typed, built for concurrency. Goroutines and channels. Fast compilation, small binaries. Standard library includes HTTP server. Kubernetes, Docker written in Go." },
+      { id: 17, name: "Rust", desc: "Memory-safe without garbage collection. Ownership system prevents data races at compile time. Actix-web, Axum frameworks. Extreme performance. Steeper learning curve." },
+      { id: 18, name: "Java / Kotlin", desc: "JVM languages. Java: Spring Boot ecosystem, enterprise standard. Kotlin: modern syntax, coroutines, null safety. JVM: mature, performant, excellent tooling." },
+      { id: 19, name: "C# / .NET", desc: "Microsoft ecosystem. ASP.NET Core for high-performance backends. Entity Framework ORM. Azure-native. Excellent for enterprise, gaming backends (Unity)." },
+      { id: 20, name: "Ruby", desc: "Developer happiness focused. Ruby on Rails: convention over configuration, rapid prototyping. Active Record ORM. Startup favorite. Shopify, GitHub built with Rails." },
+      { id: 21, name: "PHP", desc: "Powers ~77% of the web (WordPress). Laravel: modern MVC framework. Composer package manager. Swoole for async. Still actively evolving with PHP 8.x." },
+      { id: 22, name: "Elixir / Erlang", desc: "BEAM VM: fault-tolerant, concurrent, distributed. Elixir: modern syntax on Erlang's VM. Phoenix framework. Ideal for real-time systems, chat, IoT. WhatsApp uses Erlang." },
+      { id: 23, name: "Deno / Bun", desc: "Deno: secure TS/JS runtime by Node creator. Bun: all-in-one (runtime, bundler, package manager, test runner). Both aim to improve on Node.js limitations." },
+    ],
+  },
+  {
+    name: "APIs & Communication",
+    icon: "⬢",
+    color: "#F97316",
+    concepts: [
+      { id: 24, name: "REST (Representational State Transfer)", desc: "Resource-based API design using HTTP methods. GET /users, POST /users, PUT /users/:id, DELETE /users/:id. Stateless. JSON responses. Most common API style." },
+      { id: 25, name: "RESTful Design Principles", desc: "Nouns for resources, HTTP verbs for actions. Plural naming (/users). Nested routes (/users/:id/orders). HATEOAS for discoverability. Consistent error responses." },
+      { id: 26, name: "GraphQL", desc: "Query language for APIs. Client specifies exact data needed. Single endpoint. Schema-defined types. Resolvers fetch data. Solves over/under-fetching. Apollo Server, Yoga." },
+      { id: 27, name: "gRPC", desc: "High-performance RPC framework by Google. Protocol Buffers (binary serialization). HTTP/2 multiplexing. Streaming (unary, server, client, bidirectional). Ideal for microservice communication." },
+      { id: 28, name: "WebSocket", desc: "Full-duplex persistent connection. Real-time bidirectional data. Chat, live feeds, gaming, collaborative editing. ws:// / wss:// protocol. Socket.IO adds fallbacks." },
+      { id: 29, name: "Server-Sent Events (SSE)", desc: "Server-to-client one-way streaming over HTTP. EventSource API. Auto-reconnection. Simpler than WebSocket for push notifications, live updates, progress tracking." },
+      { id: 30, name: "Webhooks", desc: "HTTP callbacks triggered by events. Server A sends POST to Server B's URL when something happens. No polling. GitHub webhooks, Stripe events, Slack notifications." },
+      { id: 31, name: "API Versioning", desc: "Managing API changes without breaking clients. URL path (/v1/users), header (Accept-Version), query param (?v=2). Deprecation policy and migration guides." },
+      { id: 32, name: "API Pagination", desc: "Returning data in pages. Offset-based (page=2&limit=20), cursor-based (after=abc123), keyset. Cursor-based is more performant for large datasets." },
+      { id: 33, name: "API Rate Limiting", desc: "Restricting request frequency to protect servers. Token bucket, sliding window, fixed window. Headers: X-RateLimit-Limit, X-RateLimit-Remaining, Retry-After." },
+      { id: 34, name: "HATEOAS", desc: "Hypermedia As The Engine Of Application State. API responses include links to related actions/resources. Self-documenting APIs. REST maturity level 3." },
+      { id: 35, name: "API Documentation (OpenAPI / Swagger)", desc: "Machine-readable API specification. OpenAPI 3.x is the standard. Swagger UI for interactive docs. Code generation for clients and servers. Postman collections." },
+      { id: 36, name: "tRPC", desc: "End-to-end type-safe APIs for TypeScript. No schema, no codegen. Server defines procedures, client calls with full type inference. Pairs with React Query." },
+      { id: 37, name: "JSON:API / HAL / JSON-LD", desc: "Standardized JSON response formats. JSON:API: relationships, pagination, sparse fieldsets. HAL: hyperlinks. JSON-LD: linked data with semantic context." },
+      { id: 38, name: "Long Polling vs Short Polling", desc: "Short polling: client repeatedly requests at intervals. Long polling: server holds request until data is available, then responds. Bridge to WebSocket/SSE." },
+      { id: 39, name: "Protocol Buffers (Protobuf)", desc: "Google's binary serialization format. Smaller, faster than JSON. Schema-defined (.proto files). Language-neutral code generation. Used with gRPC and data storage." },
+      { id: 40, name: "MessagePack / CBOR / Avro", desc: "Binary serialization alternatives. MessagePack: like JSON but binary. CBOR: self-describing binary. Avro: schema-based, Hadoop ecosystem. Smaller payloads, faster parsing." },
+    ],
+  },
+  {
+    name: "Databases & Storage",
+    icon: "◈",
+    color: "#8B5CF6",
+    concepts: [
+      { id: 41, name: "Relational Databases (SQL)", desc: "Structured data in tables with rows and columns. ACID transactions. SQL query language. PostgreSQL, MySQL, SQLite, SQL Server. Best for structured, relational data." },
+      { id: 42, name: "PostgreSQL", desc: "Advanced open-source relational DB. JSONB, full-text search, extensions (PostGIS, pgvector), CTEs, window functions, LISTEN/NOTIFY. The default backend choice." },
+      { id: 43, name: "MySQL / MariaDB", desc: "Most deployed open-source database. InnoDB engine (ACID), replication, partitioning. MariaDB: community fork with additional features. WordPress, many web apps." },
+      { id: 44, name: "SQLite", desc: "Embedded file-based database. Zero configuration, serverless. Single-file storage. Perfect for mobile apps, CLI tools, edge computing, development. Turso for distributed SQLite." },
+      { id: 45, name: "NoSQL Databases (Overview)", desc: "Non-relational databases optimized for specific access patterns. Document (MongoDB), Key-Value (Redis), Column-Family (Cassandra), Graph (Neo4j). Schema-flexible." },
+      { id: 46, name: "MongoDB", desc: "Document database storing BSON (binary JSON). Flexible schema, horizontal scaling, aggregation pipeline, change streams. Atlas for managed hosting. Most popular NoSQL." },
+      { id: 47, name: "Redis", desc: "In-memory key-value store. Strings, hashes, lists, sets, sorted sets, streams. Caching, sessions, queues, pub/sub, rate limiting. Sub-millisecond latency." },
+      { id: 48, name: "Cassandra / ScyllaDB", desc: "Wide-column store for massive scale. No single point of failure. Tunable consistency. Time-series, IoT, high-write workloads. ScyllaDB: C++ rewrite, 10x faster." },
+      { id: 49, name: "DynamoDB", desc: "AWS managed key-value/document DB. Single-digit millisecond latency at any scale. On-demand or provisioned capacity. DAX for caching. Global tables for multi-region." },
+      { id: 50, name: "Elasticsearch / OpenSearch", desc: "Distributed search and analytics engine. Full-text search, fuzzy matching, aggregations, geo queries. ELK stack for logging. OpenSearch is the AWS fork." },
+      { id: 51, name: "Neo4j (Graph Database)", desc: "Stores data as nodes and relationships. Cypher query language. Social networks, recommendation engines, fraud detection, knowledge graphs. Relationship-first queries." },
+      { id: 52, name: "Vector Databases", desc: "Store and query high-dimensional embeddings. Similarity search for AI/ML: semantic search, RAG, recommendations. Pinecone, Weaviate, Milvus, pgvector." },
+      { id: 53, name: "Time-Series Databases", desc: "Optimized for timestamped data. InfluxDB, TimescaleDB (PostgreSQL extension), QuestDB. Metrics, IoT sensors, financial data. Built-in downsampling and retention." },
+      { id: 54, name: "Object Storage (S3)", desc: "Store unstructured data (files, images, videos, backups) as objects. S3, GCS, MinIO. Virtually unlimited, cheap. Not a filesystem — key-value with metadata." },
+      { id: 55, name: "NewSQL Databases", desc: "SQL databases with NoSQL scalability. CockroachDB, TiDB, YugabyteDB, Spanner. Distributed ACID transactions. Horizontal scaling without sacrificing consistency." },
+    ],
+  },
+  {
+    name: "Data Modeling & Access",
+    icon: "⊞",
+    color: "#EC4899",
+    concepts: [
+      { id: 56, name: "ORM (Object-Relational Mapping)", desc: "Maps database tables to code objects. Prisma (TS), SQLAlchemy (Python), Hibernate (Java), Active Record (Ruby), Entity Framework (.NET). Abstracts raw SQL." },
+      { id: 57, name: "Query Builders", desc: "Programmatic SQL construction without full ORM overhead. Knex.js, Drizzle ORM, JOOQ, Kysely. Type-safe queries with more control than ORMs." },
+      { id: 58, name: "Raw SQL & Prepared Statements", desc: "Direct SQL execution. Prepared statements prevent SQL injection by parameterizing inputs. Maximum control and performance. Use for complex queries ORMs can't express." },
+      { id: 59, name: "Database Migrations", desc: "Versioned schema changes applied in order. Up (apply) and down (rollback) scripts. Prisma Migrate, Alembic, Flyway, Knex migrations. Track in version control." },
+      { id: 60, name: "Database Normalization (1NF–5NF)", desc: "Organizing data to reduce redundancy. 1NF: atomic values. 2NF: no partial dependencies. 3NF: no transitive dependencies. Balance normalization with query performance." },
+      { id: 61, name: "Denormalization", desc: "Intentionally adding redundancy for read performance. Materialized views, computed columns, duplicated data. Trade storage and write complexity for faster reads." },
+      { id: 62, name: "Indexing", desc: "Data structures (B-tree, hash, GIN, GiST) for fast lookups. Composite indexes, covering indexes, partial indexes. Speeds reads, slows writes. EXPLAIN ANALYZE to verify." },
+      { id: 63, name: "Database Transactions & ACID", desc: "Atomicity (all-or-nothing), Consistency (valid state), Isolation (concurrent safety), Durability (persisted). BEGIN → operations → COMMIT/ROLLBACK." },
+      { id: 64, name: "Transaction Isolation Levels", desc: "Read Uncommitted → Read Committed → Repeatable Read → Serializable. Higher isolation prevents more anomalies (dirty reads, phantom reads) but reduces concurrency." },
+      { id: 65, name: "Connection Pooling", desc: "Reusing database connections instead of creating new ones per request. PgBouncer, HikariCP, node-postgres pool. Reduces connection overhead dramatically." },
+      { id: 66, name: "N+1 Query Problem", desc: "Fetching N related records with N+1 separate queries instead of one. Solved with eager loading (JOIN), data loaders (GraphQL), or includes (ORM). Major performance killer." },
+      { id: 67, name: "Database Sharding", desc: "Splitting data across multiple database instances by shard key (user_id, region). Horizontal scaling. Complexity: cross-shard queries, rebalancing, hotspots." },
+      { id: 68, name: "Read Replicas", desc: "Database copies handling read queries, offloading the primary. Asynchronous replication introduces lag. Route writes to primary, reads to replicas." },
+      { id: 69, name: "Database Replication", desc: "Copying data across nodes. Single-leader (primary-replica), multi-leader, leaderless. Synchronous vs asynchronous. Trade-off: consistency vs latency vs availability." },
+      { id: 70, name: "CQRS (Command Query Responsibility Segregation)", desc: "Separate models for reads and writes. Write model optimized for updates, read model for queries. Different databases possible. Event sourcing often paired." },
+    ],
+  },
+  {
+    name: "Authentication & Security",
+    icon: "⬟",
+    color: "#EF4444",
+    concepts: [
+      { id: 71, name: "Authentication vs Authorization", desc: "Authentication (AuthN): verifying identity (who are you?). Authorization (AuthZ): verifying permissions (what can you do?). Different concerns handled differently." },
+      { id: 72, name: "Password Hashing", desc: "Never store plaintext passwords. bcrypt, scrypt, Argon2 with salt. Cost factor / work factor controls computational expense. Argon2id is the current recommendation." },
+      { id: 73, name: "JWT (JSON Web Tokens)", desc: "Self-contained tokens: header.payload.signature. Stateless authentication. Contains claims (user ID, roles, expiry). Signed with HMAC or RSA. Verify without DB lookup." },
+      { id: 74, name: "Session-Based Authentication", desc: "Server stores session in memory/DB/Redis, sends session ID cookie. Stateful. Easy to revoke. Cookie attributes: HttpOnly, Secure, SameSite, Path, Domain." },
+      { id: 75, name: "OAuth 2.0", desc: "Authorization framework for delegated access. Grant types: Authorization Code (+ PKCE), Client Credentials, Device Code. Access tokens + refresh tokens." },
+      { id: 76, name: "OpenID Connect (OIDC)", desc: "Identity layer on top of OAuth 2.0. Provides ID tokens (JWT) with user info. Standard claims (sub, email, name). SSO foundation. Auth0, Clerk, Keycloak implement it." },
+      { id: 77, name: "API Keys", desc: "Simple tokens identifying the calling application. Sent in headers or query params. Good for server-to-server. Not for user auth. Rate limit and rotate regularly." },
+      { id: 78, name: "Multi-Factor Authentication (MFA)", desc: "Something you know (password) + something you have (TOTP, SMS, hardware key) + something you are (biometric). TOTP (RFC 6238) preferred over SMS." },
+      { id: 79, name: "RBAC / ABAC / ReBAC", desc: "RBAC: Role-Based (admin, editor, viewer). ABAC: Attribute-Based (department=engineering AND level>3). ReBAC: Relationship-Based (owner of document). Increasing flexibility." },
+      { id: 80, name: "CORS (Cross-Origin Resource Sharing)", desc: "Browser security mechanism. Server declares which origins can access it via headers. Access-Control-Allow-Origin, Allow-Methods, Allow-Headers. Preflight OPTIONS requests." },
+      { id: 81, name: "CSRF Protection", desc: "Prevent forged requests from other sites. CSRF tokens in forms, SameSite cookies, double-submit cookie pattern, checking Origin/Referer headers." },
+      { id: 82, name: "SQL Injection Prevention", desc: "Use parameterized queries / prepared statements. Never interpolate user input into SQL strings. ORMs handle this by default. Still #1 vulnerability (OWASP)." },
+      { id: 83, name: "XSS Prevention (Backend)", desc: "Sanitize/escape output. Content-Security-Policy headers. HttpOnly cookies prevent JS access to session tokens. Validate and sanitize inputs server-side." },
+      { id: 84, name: "Encryption at Rest & in Transit", desc: "In transit: TLS 1.3 for all connections. At rest: AES-256 for stored data, encrypted database volumes, encrypted backups. Key management via KMS (AWS KMS, Vault)." },
+      { id: 85, name: "Secret Management", desc: "Storing API keys, DB passwords, tokens securely. HashiCorp Vault, AWS Secrets Manager, Doppler, SOPS. Never in code, never in env files committed to Git." },
+      { id: 86, name: "Rate Limiting & Throttling", desc: "Protecting APIs from abuse. Token bucket, sliding window, fixed window algorithms. Per-user, per-IP, per-API-key. Return 429 Too Many Requests with Retry-After." },
+      { id: 87, name: "Input Validation & Sanitization", desc: "Validate type, format, length, range server-side. Zod, Joi, class-validator, Pydantic. Sanitize HTML (DOMPurify). Reject early, fail securely." },
+      { id: 88, name: "OWASP Top 10", desc: "Top web security risks: Broken Access Control, Cryptographic Failures, Injection, Insecure Design, Security Misconfiguration, Vulnerable Components, Auth Failures, Data Integrity, Logging Failures, SSRF." },
+    ],
+  },
+  {
+    name: "Caching",
+    icon: "⬣",
+    color: "#F59E0B",
+    concepts: [
+      { id: 89, name: "Caching Strategies Overview", desc: "Store frequently accessed data in fast storage to reduce latency and database load. Decide: what to cache, where, how long, and how to invalidate." },
+      { id: 90, name: "Cache-Aside (Lazy Loading)", desc: "Application checks cache first. On miss: read from DB, write to cache. Most common pattern. Cache only what's requested. Cold cache on startup." },
+      { id: 91, name: "Write-Through Cache", desc: "Write to cache and DB simultaneously. Cache is always consistent. Higher write latency but simpler reads. Good for read-heavy data that's written occasionally." },
+      { id: 92, name: "Write-Behind (Write-Back)", desc: "Write to cache first, asynchronously flush to DB. Fastest writes but risk data loss if cache fails before flush. Buffer writes for batch DB operations." },
+      { id: 93, name: "Read-Through Cache", desc: "Cache itself handles DB reads on miss. Application always reads from cache. Cache layer encapsulates data source. Simplifies application code." },
+      { id: 94, name: "Cache Invalidation", desc: "'Only two hard things: cache invalidation and naming things.' TTL-based, event-based (publish on write), version-based. Stale data is the primary risk." },
+      { id: 95, name: "Cache Eviction Policies", desc: "LRU (Least Recently Used), LFU (Least Frequently Used), FIFO, Random, TTL-based. LRU is the most common default. Redis supports multiple policies." },
+      { id: 96, name: "CDN Caching", desc: "Cache responses at edge locations. Cache-Control headers: max-age, s-maxage, stale-while-revalidate. Surrogate-Key for targeted invalidation. Cloudflare, Fastly, CloudFront." },
+      { id: 97, name: "HTTP Caching", desc: "Browser and proxy caching via headers. Cache-Control, ETag, Last-Modified, Vary. 304 Not Modified for conditional requests. Reduces server load and latency." },
+      { id: 98, name: "Distributed Cache (Redis Cluster)", desc: "Cache spread across multiple nodes. Redis Cluster: automatic sharding, failover. Memcached: simpler, multi-threaded. Scales beyond single-machine memory limits." },
+      { id: 99, name: "Cache Stampede / Thundering Herd", desc: "Many requests hit DB simultaneously when a popular cache key expires. Solutions: locking (single recompute), probabilistic early expiry, stale-while-revalidate." },
+      { id: 100, name: "Application-Level Caching", desc: "In-memory caches within the application process. Node-cache, Guava Cache, functools.lru_cache. Zero network latency. Lost on restart. Good for computed values." },
+      { id: 101, name: "Memoization", desc: "Caching function results based on arguments. Avoid recomputing expensive operations. In-memory, per-request, or persistent. Redis for shared memoization across instances." },
+    ],
+  },
+  {
+    name: "Messaging & Async Processing",
+    icon: "↯",
+    color: "#06B6D4",
+    concepts: [
+      { id: 102, name: "Message Queues", desc: "Asynchronous communication buffer between producers and consumers. Decouples services. RabbitMQ (AMQP), SQS, BullMQ (Redis). At-least-once or exactly-once delivery." },
+      { id: 103, name: "Pub/Sub (Publish-Subscribe)", desc: "Publishers send messages to topics. Multiple subscribers receive copies. Fan-out pattern. Redis Pub/Sub, Google Pub/Sub, SNS. One event triggers many reactions." },
+      { id: 104, name: "Event Streaming (Kafka)", desc: "Append-only distributed log. Consumers read at their own pace. Replayable. Kafka, Redpanda, Amazon Kinesis. High throughput, ordered within partitions." },
+      { id: 105, name: "Background Jobs / Workers", desc: "Processing tasks outside the request cycle: emails, image processing, reports, data pipelines. BullMQ, Celery, Sidekiq, Temporal. Queue → worker → result." },
+      { id: 106, name: "Scheduled Jobs (Cron)", desc: "Time-based task execution. Cron expressions (0 */6 * * *). node-cron, APScheduler, Hangfire. Use distributed schedulers to avoid duplicate execution across instances." },
+      { id: 107, name: "Dead Letter Queue (DLQ)", desc: "Stores messages that fail processing after max retries. Enables debugging without blocking the pipeline. Alert on DLQ growth. Manual or automated re-processing." },
+      { id: 108, name: "Event Sourcing", desc: "Store all state changes as immutable events instead of current state. Rebuild state by replaying events. Full audit trail, temporal queries, undo capability." },
+      { id: 109, name: "Saga Pattern", desc: "Manage distributed transactions across microservices. Sequence of local transactions with compensating actions on failure. Choreography (events) or orchestration (coordinator)." },
+      { id: 110, name: "Outbox Pattern", desc: "Reliably publish events alongside DB writes. Write event to outbox table in same transaction. Separate process publishes from outbox. Prevents lost events." },
+      { id: 111, name: "Idempotency", desc: "Operations produce the same result regardless of how many times executed. Idempotency keys for API requests. Essential for retry safety. PUT is idempotent, POST is not." },
+      { id: 112, name: "Backpressure", desc: "Mechanism to slow producers when consumers can't keep up. Prevents queue overflow and system crashes. Bounded queues, rate limiting, reactive streams." },
+      { id: 113, name: "Workflow Engines (Temporal / Inngest)", desc: "Orchestrate complex, long-running processes with durability. Automatic retries, state persistence, timeout handling. Temporal, Inngest, Step Functions, Airflow." },
+    ],
+  },
+  {
+    name: "Microservices & Architecture",
+    icon: "⟐",
+    color: "#A855F7",
+    concepts: [
+      { id: 114, name: "Monolith vs Microservices", desc: "Monolith: single deployable unit, shared database. Microservices: independent services, own databases, communicate via APIs/events. Start monolith, extract when needed." },
+      { id: 115, name: "Microservices Communication", desc: "Synchronous: REST, gRPC (request-response). Asynchronous: message queues, event streaming (fire-and-forget). Prefer async for loose coupling and resilience." },
+      { id: 116, name: "API Gateway", desc: "Single entry point for all client requests. Routes to appropriate service. Handles auth, rate limiting, request transformation, response aggregation. Kong, AWS API Gateway." },
+      { id: 117, name: "Service Discovery", desc: "How services find each other in dynamic environments. DNS-based (Kubernetes CoreDNS), registry-based (Consul, Eureka), or environment variables." },
+      { id: 118, name: "Service Mesh", desc: "Infrastructure layer managing service-to-service communication. mTLS, retries, circuit breaking, observability. Sidecar proxy pattern. Istio, Linkerd, Consul Connect." },
+      { id: 119, name: "Circuit Breaker Pattern", desc: "Stop calling a failing service after threshold. States: closed (normal) → open (fail fast) → half-open (test recovery). Prevents cascade failures. Resilience4j, Polly." },
+      { id: 120, name: "Bulkhead Pattern", desc: "Isolate components into failure domains. Thread pools, connection pools, or process isolation per service. One failing dependency doesn't exhaust shared resources." },
+      { id: 121, name: "Strangler Fig Pattern", desc: "Incrementally migrate from monolith to microservices. Route requests to new service or legacy based on feature. Gradually replace until monolith is retired." },
+      { id: 122, name: "Sidecar Pattern", desc: "Deploy helper processes alongside main service. Handles cross-cutting concerns: logging, monitoring, networking, security. Foundation of service mesh architecture." },
+      { id: 123, name: "Backend for Frontend (BFF)", desc: "Dedicated backend per frontend type (web, mobile, CLI). Tailors API responses, aggregates data, handles auth per client. Reduces frontend complexity." },
+      { id: 124, name: "Event-Driven Architecture", desc: "Services communicate through events. Producers emit, consumers react. Loose coupling, temporal decoupling, audit trail. Event broker (Kafka) mediates." },
+      { id: 125, name: "Serverless Functions", desc: "Code runs without managing servers. AWS Lambda, Vercel Functions, Cloudflare Workers. Pay-per-execution. Cold starts are the main trade-off. Event-triggered." },
+      { id: 126, name: "Modular Monolith", desc: "Monolith with clear module boundaries. Each module has its own domain, data access, and public API. Easier to extract to microservices later. Best of both worlds." },
+    ],
+  },
+  {
+    name: "DevOps & Operations",
+    icon: "⟡",
+    color: "#10B981",
+    concepts: [
+      { id: 127, name: "Containerization (Docker)", desc: "Package application with all dependencies into a container image. Consistent across environments. Dockerfile → build → run. Docker Compose for multi-container apps." },
+      { id: 128, name: "Kubernetes (K8s)", desc: "Container orchestration: deployment, scaling, networking, self-healing. Pods, Deployments, Services, Ingress. The industry standard for production container management." },
+      { id: 129, name: "CI/CD Pipelines", desc: "Automated workflow: commit → build → test → deploy. GitHub Actions, GitLab CI, Jenkins, CircleCI. Pipeline as code. Quality gates at every stage." },
+      { id: 130, name: "Logging", desc: "Structured event records (JSON format). Centralize with ELK Stack, Loki, Datadog. Log levels: debug, info, warn, error, fatal. Correlation IDs across services." },
+      { id: 131, name: "Monitoring & Alerting", desc: "Track system metrics: CPU, memory, request rate, error rate, latency. Prometheus + Grafana. Alert on anomalies. SLIs/SLOs/SLAs define targets." },
+      { id: 132, name: "Distributed Tracing", desc: "Track requests across microservices. Each span represents a unit of work. Jaeger, Zipkin, Datadog APM. Trace ID propagated through headers. Find bottlenecks." },
+      { id: 133, name: "OpenTelemetry", desc: "Vendor-neutral instrumentation standard. SDKs generate metrics, logs, and traces. Export to any backend (Datadog, New Relic, Grafana). Becoming the universal standard." },
+      { id: 134, name: "Health Checks", desc: "Endpoints reporting service status. Liveness: is it alive? Readiness: can it accept traffic? Startup: has it initialized? K8s probes, load balancer health checks." },
+      { id: 135, name: "Deployment Strategies", desc: "Rolling (gradual replacement), Blue-Green (two environments), Canary (small traffic percentage), Feature Flags (toggle features). Each trades speed for safety differently." },
+      { id: 136, name: "Database Migration in Production", desc: "Schema changes must be backward-compatible. Expand-contract pattern: add new → migrate data → remove old. Never rename/delete columns directly. Online DDL tools." },
+      { id: 137, name: "Infrastructure as Code (IaC)", desc: "Terraform, Pulumi, CloudFormation. Define infrastructure in versioned code. Reproducible, reviewable, auditable. Plan → apply workflow. Remote state management." },
+      { id: 138, name: "Environment Management", desc: "Development → Staging → Production. Environment variables for config (12-factor). .env files (local only), secrets managers (production). Never hardcode environment-specific values." },
+    ],
+  },
+  {
+    name: "Scalability & Performance",
+    icon: "◎",
+    color: "#F43F5E",
+    concepts: [
+      { id: 139, name: "Horizontal vs Vertical Scaling", desc: "Vertical: bigger server (more CPU/RAM). Horizontal: more servers behind load balancer. Horizontal is preferred for resilience and unlimited growth. Stateless services scale horizontally." },
+      { id: 140, name: "Load Balancing", desc: "Distribute traffic across servers. Algorithms: Round Robin, Least Connections, IP Hash, Weighted. Layer 4 (TCP) vs Layer 7 (HTTP). Nginx, HAProxy, AWS ALB/NLB." },
+      { id: 141, name: "Reverse Proxy", desc: "Sits in front of backend servers. SSL termination, compression, caching, rate limiting, request routing. Nginx, Caddy, Traefik. Often combined with load balancer." },
+      { id: 142, name: "Database Connection Pooling", desc: "Reuse connections instead of creating per request. PgBouncer (transaction/session pooling), HikariCP, generic-pool. Reduces connection overhead 10-100x." },
+      { id: 143, name: "Query Optimization", desc: "EXPLAIN ANALYZE for query plans. Add indexes for WHERE/JOIN columns. Avoid SELECT *. Use pagination. Optimize N+1 queries. Slow query log for identification." },
+      { id: 144, name: "Async Processing", desc: "Offload heavy work from request cycle. Image processing, email sending, report generation → background queues. Return 202 Accepted, poll or callback for result." },
+      { id: 145, name: "Concurrency Models", desc: "Thread-per-request (Java), event loop (Node.js), goroutines (Go), actor model (Erlang/Akka), async/await (Python asyncio). Each handles concurrent requests differently." },
+      { id: 146, name: "Back-of-the-Envelope Estimation", desc: "Quick capacity math. QPS, storage growth, bandwidth needs. 86,400 seconds/day. 1M daily users ≈ 12 QPS average. 10:1 read:write ratio. Size requests to plan infrastructure." },
+      { id: 147, name: "Graceful Shutdown", desc: "Handle SIGTERM: stop accepting new requests, finish in-flight requests, close DB connections, flush logs. Process managers (PM2, systemd) send signals on deploy." },
+      { id: 148, name: "Compression (gzip / Brotli)", desc: "Compress HTTP responses to reduce transfer size. Brotli: better compression ratio. gzip: wider support. Content-Encoding header. 60-80% size reduction for text." },
+      { id: 149, name: "Batch Processing", desc: "Processing large datasets in batches rather than real-time. ETL pipelines, report generation, data migrations. Spark, Hadoop MapReduce, custom scripts with chunking." },
+      { id: 150, name: "Stream Processing", desc: "Processing data in real-time as it arrives. Kafka Streams, Flink, Storm. Windowing, aggregations, joins on streams. Lower latency than batch. Exactly-once semantics." },
+    ],
+  },
+  {
+    name: "Reliability & Resilience",
+    icon: "⛉",
+    color: "#0EA5E9",
+    concepts: [
+      { id: 151, name: "Retry with Exponential Backoff", desc: "Retry failed requests with increasing delays (1s, 2s, 4s, 8s) plus random jitter. Prevents thundering herd on recovering services. Set max retries and timeout." },
+      { id: 152, name: "Timeouts", desc: "Always set timeouts for external calls: HTTP requests, DB queries, cache operations. Connection timeout + read timeout. Fail fast rather than hang indefinitely." },
+      { id: 153, name: "Graceful Degradation", desc: "System continues with reduced functionality during failures. Serve cached data if DB is down. Disable recommendations if ML service fails. Feature flags help." },
+      { id: 154, name: "Failover Strategies", desc: "Active-passive: standby takes over on failure. Active-active: both serve traffic, share load. DNS failover, database failover, multi-region failover." },
+      { id: 155, name: "Data Backup Strategies", desc: "Full, incremental, differential backups. 3-2-1 rule: 3 copies, 2 media types, 1 offsite. Point-in-time recovery (PITR). Test restores regularly." },
+      { id: 156, name: "Chaos Engineering", desc: "Intentionally inject failures to test resilience. Kill processes, inject latency, simulate outages. Netflix Chaos Monkey, Gremlin. Build confidence in production systems." },
+      { id: 157, name: "Error Handling Patterns", desc: "Return meaningful error responses: status code, error code, message, details. Never expose internal errors to clients. Log full stack trace server-side." },
+      { id: 158, name: "Distributed Transactions", desc: "Transactions spanning multiple services. Two-Phase Commit (2PC): prepare → commit. Saga pattern: local transactions + compensation. Avoid 2PC when possible — use sagas." },
+      { id: 159, name: "Consistency Models", desc: "Strong: read always returns latest write. Eventual: reads eventually catch up. Causal: respects cause-and-effect ordering. Read-your-writes: see your own changes immediately." },
+      { id: 160, name: "CAP Theorem", desc: "Distributed systems guarantee only 2 of 3: Consistency, Availability, Partition Tolerance. Since partitions happen, choose CP (consistent) or AP (available). PACELC extends this." },
+    ],
+  },
+  {
+    name: "Advanced & Emerging",
+    icon: "✦",
+    color: "#D946EF",
+    concepts: [
+      { id: 161, name: "Edge Computing", desc: "Running backend logic at CDN edge locations. Cloudflare Workers, Vercel Edge Functions, Deno Deploy. Lowest latency. Limited runtimes (no filesystem, smaller memory)." },
+      { id: 162, name: "AI/ML Integration", desc: "Embedding AI in backends: LLM APIs (OpenAI, Anthropic), embedding generation, RAG pipelines, vector search, model serving (TensorFlow Serving, Triton), feature stores." },
+      { id: 163, name: "RAG (Retrieval-Augmented Generation)", desc: "Combine LLMs with your data: embed documents → store in vector DB → retrieve relevant chunks → pass to LLM as context. Powers AI-driven search and chat." },
+      { id: 164, name: "WebAssembly on the Server", desc: "Run Wasm modules server-side for near-native performance. Language-agnostic (Rust, C, Go compiled to Wasm). Spin, Fermyon, WasmCloud. Fast cold starts." },
+      { id: 165, name: "Multi-Tenancy", desc: "Single application serving multiple customers (tenants). Shared database (tenant_id column), schema-per-tenant, or database-per-tenant. Data isolation is critical." },
+      { id: 166, name: "Feature Flags", desc: "Toggle functionality without deployment. Percentage rollouts, user targeting, kill switches. LaunchDarkly, Flagsmith, Unleash. Decouple deploy from release." },
+      { id: 167, name: "Audit Logging", desc: "Immutable log of who did what, when, and to what. Compliance requirement (SOC2, HIPAA, GDPR). Structured logs with actor, action, resource, timestamp, before/after state." },
+      { id: 168, name: "File Upload Handling", desc: "Multipart form data, streaming uploads, direct-to-S3 presigned URLs, chunked uploads for large files, virus scanning, type validation, size limits." },
+      { id: 169, name: "Email Sending", desc: "Transactional (receipts, password resets) and marketing emails. Providers: SendGrid, Postmark, Resend, SES. SPF/DKIM/DMARC for deliverability. Queue emails, don't send synchronously." },
+      { id: 170, name: "Full-Text Search", desc: "Beyond LIKE queries. Tokenization, stemming, ranking, fuzzy matching, faceted search. Elasticsearch, Typesense, Meilisearch, PostgreSQL tsvector. Search-as-you-type." },
+      { id: 171, name: "Webhooks (Implementing)", desc: "Sending webhooks: retry with backoff, signature verification (HMAC), event types, payload versioning. Receiving: verify signatures, respond quickly (202), process async." },
+      { id: 172, name: "Data Privacy & Compliance", desc: "GDPR: right to deletion, data portability, consent. CCPA: California privacy rights. PII encryption, data retention policies, anonymization, audit trails." },
+      { id: 173, name: "API Monetization & Metering", desc: "Tracking API usage per customer. Billing based on requests, compute, storage. Usage metering, rate tiers, overage handling. Stripe Billing, Lago, Orb." },
+      { id: 174, name: "Database as a Service (DBaaS)", desc: "Fully managed databases. PlanetScale (MySQL), Supabase (PostgreSQL), Neon (serverless Postgres), Turso (SQLite), MongoDB Atlas. Branching, scaling, zero-ops." },
+      { id: 175, name: "Real-Time Collaboration", desc: "Multiple users editing simultaneously. CRDTs (Conflict-free Replicated Data Types), Operational Transform (OT). Yjs, Liveblocks, Partykit. Google Docs-like experiences." },
+    ],
+  },
+];
+
+const totalConcepts = categories.reduce((sum, c) => sum + c.concepts.length, 0);
+
+export default function BackendConcepts() {
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [search, setSearch] = useState("");
+  const [expandedId, setExpandedId] = useState(null);
+
+  const filteredCategories = categories
+    .map((cat) => ({
+      ...cat,
+      concepts: cat.concepts.filter(
+        (c) =>
+          c.name.toLowerCase().includes(search.toLowerCase()) ||
+          c.desc.toLowerCase().includes(search.toLowerCase())
+      ),
+    }))
+    .filter((cat) => cat.concepts.length > 0);
+
+  const displayCategories = activeCategory
+    ? filteredCategories.filter((c) => c.name === activeCategory)
+    : filteredCategories;
+
+  const matchCount = filteredCategories.reduce(
+    (sum, c) => sum + c.concepts.length,
+    0
+  );
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#040608",
+        color: "#C4C4DA",
+        fontFamily: "'Victor Mono', 'Fira Code', 'Cascadia Code', monospace",
+      }}
+    >
+      <div
+        style={{
+          padding: "40px 32px 24px",
+          borderBottom: "1px solid rgba(255,255,255,0.035)",
+          background: "linear-gradient(180deg, rgba(34,197,94,0.045) 0%, transparent 100%)",
+        }}
+      >
+        <div style={{ maxWidth: 960, margin: "0 auto" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
+            <span style={{ fontSize: 11, letterSpacing: 4, textTransform: "uppercase", color: "#22C55E", fontWeight: 600 }}>
+              Reference Guide
+            </span>
+            <span style={{ fontSize: 10, background: "rgba(34,197,94,0.11)", color: "#22C55E", padding: "2px 8px", borderRadius: 3, letterSpacing: 1 }}>
+              {totalConcepts} CONCEPTS
+            </span>
+          </div>
+          <h1 style={{ fontSize: 28, fontWeight: 700, margin: "8px 0 6px", color: "#F0F0FF", letterSpacing: -0.5, fontFamily: "'Instrument Sans', 'General Sans', system-ui, sans-serif" }}>
+            Backend Development Concepts
+          </h1>
+          <p style={{ fontSize: 13, color: "#4A4A62", margin: 0, lineHeight: 1.5 }}>
+            APIs to distributed systems — the complete server-side engineering reference
+          </p>
+
+          <div style={{ marginTop: 20, position: "relative" }}>
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search concepts..."
+              style={{
+                width: "100%", padding: "10px 16px 10px 36px",
+                background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.045)",
+                borderRadius: 8, color: "#C4C4DA", fontSize: 13, fontFamily: "inherit", outline: "none", boxSizing: "border-box",
+              }}
+            />
+            <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "#2E2E40", fontSize: 14 }}>⌕</span>
+            {search && (
+              <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", color: "#4A4A62", fontSize: 11 }}>
+                {matchCount} results
+              </span>
+            )}
+          </div>
+
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 16 }}>
+            <button
+              onClick={() => setActiveCategory(null)}
+              style={{
+                padding: "5px 12px", fontSize: 11, borderRadius: 4, border: "1px solid",
+                borderColor: !activeCategory ? "rgba(34,197,94,0.4)" : "rgba(255,255,255,0.045)",
+                background: !activeCategory ? "rgba(34,197,94,0.08)" : "transparent",
+                color: !activeCategory ? "#22C55E" : "#4A4A62",
+                cursor: "pointer", fontFamily: "inherit", letterSpacing: 0.3, transition: "all 0.15s",
+              }}
+            >All</button>
+            {categories.map((cat) => (
+              <button
+                key={cat.name}
+                onClick={() => setActiveCategory(activeCategory === cat.name ? null : cat.name)}
+                style={{
+                  padding: "5px 12px", fontSize: 11, borderRadius: 4, border: "1px solid",
+                  borderColor: activeCategory === cat.name ? `${cat.color}66` : "rgba(255,255,255,0.045)",
+                  background: activeCategory === cat.name ? `${cat.color}10` : "transparent",
+                  color: activeCategory === cat.name ? cat.color : "#4A4A62",
+                  cursor: "pointer", fontFamily: "inherit", letterSpacing: 0.3, transition: "all 0.15s",
+                }}
+              >
+                <span style={{ marginRight: 4 }}>{cat.icon}</span>
+                {cat.name}
+                <span style={{ marginLeft: 4, opacity: 0.5 }}>{cat.concepts.length}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 960, margin: "0 auto", padding: "24px 32px 60px" }}>
+        {displayCategories.map((cat) => (
+          <div key={cat.name} style={{ marginBottom: 32 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, paddingBottom: 8, borderBottom: `1px solid ${cat.color}14` }}>
+              <span style={{ color: cat.color, fontSize: 16 }}>{cat.icon}</span>
+              <h2 style={{ fontSize: 15, fontWeight: 600, color: cat.color, margin: 0, letterSpacing: 0.5, fontFamily: "'Instrument Sans', system-ui, sans-serif" }}>
+                {cat.name}
+              </h2>
+              <span style={{ fontSize: 10, color: "#282838", marginLeft: "auto" }}>{cat.concepts.length} concepts</span>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+              {cat.concepts.map((concept) => {
+                const isExpanded = expandedId === concept.id;
+                return (
+                  <div
+                    key={concept.id}
+                    onClick={() => setExpandedId(isExpanded ? null : concept.id)}
+                    style={{
+                      padding: isExpanded ? "12px 16px" : "9px 16px",
+                      background: isExpanded ? `${cat.color}05` : "rgba(255,255,255,0.006)",
+                      border: "1px solid",
+                      borderColor: isExpanded ? `${cat.color}1E` : "rgba(255,255,255,0.02)",
+                      borderRadius: 6, cursor: "pointer", transition: "all 0.15s ease",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <span style={{ fontSize: 9, color: "#282838", minWidth: 24, fontVariantNumeric: "tabular-nums" }}>
+                        {String(concept.id).padStart(3, "0")}
+                      </span>
+                      <span style={{ fontSize: 13, fontWeight: 500, color: isExpanded ? "#F0F0FF" : "#8888A2", flex: 1 }}>
+                        {concept.name}
+                      </span>
+                      <span style={{ fontSize: 10, color: "#1C1C2C", transform: isExpanded ? "rotate(90deg)" : "none", transition: "transform 0.15s" }}>▸</span>
+                    </div>
+                    {isExpanded && (
+                      <div style={{ marginTop: 10, marginLeft: 34, fontSize: 12, lineHeight: 1.7, color: "#66668A", borderLeft: `2px solid ${cat.color}1E`, paddingLeft: 12 }}>
+                        {concept.desc}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
