@@ -48,3 +48,4 @@ npm run build
 ```
 
 Deployment to GitHub Pages is automated via GitHub Actions on push to `main`.
+Arnab Biswas
