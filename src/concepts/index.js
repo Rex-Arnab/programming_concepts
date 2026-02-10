@@ -1,6 +1,3 @@
-// Auto-registry: import your concept components here
-// Each concept file should export: default component + named `meta` object
-
 const modules = import.meta.glob('./*.jsx', { eager: true });
 
 const concepts = Object.entries(modules).map(([path, mod]) => {
@@ -9,6 +6,8 @@ const concepts = Object.entries(modules).map(([path, mod]) => {
     slug,
     title: mod.meta?.title || slug,
     description: mod.meta?.description || '',
+    icon: mod.meta?.icon || null,
+    color: mod.meta?.color || '#818cf8',
     Component: mod.default,
   };
 });

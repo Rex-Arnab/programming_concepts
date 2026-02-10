@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { SiOpenai } from 'react-icons/si';
+import ConceptLayout from "../ConceptLayout";
 
 export const meta = {
   title: "AI Concepts",
   description: "Artificial intelligence and machine learning fundamentals",
+  icon: SiOpenai,
+  color: '#a78bfa',
 };
 
 const categories = [
@@ -286,163 +289,13 @@ const categories = [
   },
 ];
 
-const totalConcepts = categories.reduce((sum, c) => sum + c.concepts.length, 0);
-
 export default function AIConcepts() {
-  const [activeCategory, setActiveCategory] = useState(null);
-  const [search, setSearch] = useState("");
-  const [expandedId, setExpandedId] = useState(null);
-
-  const filteredCategories = categories
-    .map((cat) => ({
-      ...cat,
-      concepts: cat.concepts.filter(
-        (c) =>
-          c.name.toLowerCase().includes(search.toLowerCase()) ||
-          c.desc.toLowerCase().includes(search.toLowerCase())
-      ),
-    }))
-    .filter((cat) => cat.concepts.length > 0);
-
-  const displayCategories = activeCategory
-    ? filteredCategories.filter((c) => c.name === activeCategory)
-    : filteredCategories;
-
-  const matchCount = filteredCategories.reduce(
-    (sum, c) => sum + c.concepts.length,
-    0
-  );
-
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#030306",
-        color: "#C0C0D8",
-        fontFamily: "'Berkeley Mono', 'JetBrains Mono', 'Fira Code', monospace",
-      }}
-    >
-      <div
-        style={{
-          padding: "40px 32px 24px",
-          borderBottom: "1px solid rgba(255,255,255,0.03)",
-          background: "linear-gradient(180deg, rgba(167,139,250,0.045) 0%, rgba(236,72,153,0.02) 50%, transparent 100%)",
-        }}
-      >
-        <div style={{ maxWidth: 960, margin: "0 auto" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
-            <span style={{ fontSize: 11, letterSpacing: 4, textTransform: "uppercase", color: "#A78BFA", fontWeight: 600 }}>
-              Reference Guide
-            </span>
-            <span style={{ fontSize: 10, background: "rgba(167,139,250,0.1)", color: "#A78BFA", padding: "2px 8px", borderRadius: 3, letterSpacing: 1 }}>
-              {totalConcepts} CONCEPTS
-            </span>
-          </div>
-          <h1 style={{ fontSize: 28, fontWeight: 700, margin: "8px 0 6px", color: "#F2F0FF", letterSpacing: -0.5, fontFamily: "'Satoshi', 'General Sans', system-ui, sans-serif" }}>
-            Artificial Intelligence Concepts
-          </h1>
-          <p style={{ fontSize: 13, color: "#454560", margin: 0, lineHeight: 1.5 }}>
-            From neural networks to AGI — the complete AI & machine learning reference
-          </p>
-
-          <div style={{ marginTop: 20, position: "relative" }}>
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search concepts..."
-              style={{
-                width: "100%", padding: "10px 16px 10px 36px",
-                background: "rgba(255,255,255,0.018)", border: "1px solid rgba(255,255,255,0.04)",
-                borderRadius: 8, color: "#C0C0D8", fontSize: 13, fontFamily: "inherit", outline: "none", boxSizing: "border-box",
-              }}
-            />
-            <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "#2A2A3E", fontSize: 14 }}>⌕</span>
-            {search && (
-              <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", color: "#454560", fontSize: 11 }}>
-                {matchCount} results
-              </span>
-            )}
-          </div>
-
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 16 }}>
-            <button
-              onClick={() => setActiveCategory(null)}
-              style={{
-                padding: "5px 12px", fontSize: 11, borderRadius: 4, border: "1px solid",
-                borderColor: !activeCategory ? "rgba(167,139,250,0.4)" : "rgba(255,255,255,0.04)",
-                background: !activeCategory ? "rgba(167,139,250,0.08)" : "transparent",
-                color: !activeCategory ? "#A78BFA" : "#454560",
-                cursor: "pointer", fontFamily: "inherit", letterSpacing: 0.3, transition: "all 0.15s",
-              }}
-            >All</button>
-            {categories.map((cat) => (
-              <button
-                key={cat.name}
-                onClick={() => setActiveCategory(activeCategory === cat.name ? null : cat.name)}
-                style={{
-                  padding: "5px 12px", fontSize: 11, borderRadius: 4, border: "1px solid",
-                  borderColor: activeCategory === cat.name ? `${cat.color}66` : "rgba(255,255,255,0.04)",
-                  background: activeCategory === cat.name ? `${cat.color}0E` : "transparent",
-                  color: activeCategory === cat.name ? cat.color : "#454560",
-                  cursor: "pointer", fontFamily: "inherit", letterSpacing: 0.3, transition: "all 0.15s",
-                }}
-              >
-                <span style={{ marginRight: 4 }}>{cat.icon}</span>
-                {cat.name}
-                <span style={{ marginLeft: 4, opacity: 0.5 }}>{cat.concepts.length}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div style={{ maxWidth: 960, margin: "0 auto", padding: "24px 32px 60px" }}>
-        {displayCategories.map((cat) => (
-          <div key={cat.name} style={{ marginBottom: 32 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, paddingBottom: 8, borderBottom: `1px solid ${cat.color}12` }}>
-              <span style={{ color: cat.color, fontSize: 16 }}>{cat.icon}</span>
-              <h2 style={{ fontSize: 15, fontWeight: 600, color: cat.color, margin: 0, letterSpacing: 0.5, fontFamily: "'Satoshi', system-ui, sans-serif" }}>
-                {cat.name}
-              </h2>
-              <span style={{ fontSize: 10, color: "#242436", marginLeft: "auto" }}>{cat.concepts.length} concepts</span>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-              {cat.concepts.map((concept) => {
-                const isExpanded = expandedId === concept.id;
-                return (
-                  <div
-                    key={concept.id}
-                    onClick={() => setExpandedId(isExpanded ? null : concept.id)}
-                    style={{
-                      padding: isExpanded ? "12px 16px" : "9px 16px",
-                      background: isExpanded ? `${cat.color}05` : "rgba(255,255,255,0.005)",
-                      border: "1px solid",
-                      borderColor: isExpanded ? `${cat.color}1C` : "rgba(255,255,255,0.018)",
-                      borderRadius: 6, cursor: "pointer", transition: "all 0.15s ease",
-                    }}
-                  >
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <span style={{ fontSize: 9, color: "#242436", minWidth: 24, fontVariantNumeric: "tabular-nums" }}>
-                        {String(concept.id).padStart(3, "0")}
-                      </span>
-                      <span style={{ fontSize: 13, fontWeight: 500, color: isExpanded ? "#F2F0FF" : "#8585A0", flex: 1 }}>
-                        {concept.name}
-                      </span>
-                      <span style={{ fontSize: 10, color: "#1A1A2C", transform: isExpanded ? "rotate(90deg)" : "none", transition: "transform 0.15s" }}>▸</span>
-                    </div>
-                    {isExpanded && (
-                      <div style={{ marginTop: 10, marginLeft: 34, fontSize: 12, lineHeight: 1.7, color: "#626282", borderLeft: `2px solid ${cat.color}1C`, paddingLeft: 12 }}>
-                        {concept.desc}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    <ConceptLayout
+      title="Artificial Intelligence Concepts"
+      subtitle="From neural networks to AGI — the complete AI & machine learning reference"
+      accentColor="#A78BFA"
+      categories={categories}
+    />
   );
 }

@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { FiLayout } from 'react-icons/fi';
+import ConceptLayout from "../ConceptLayout";
 
 export const meta = {
   title: "Frontend Concepts",
   description: "180 essential frontend development concepts from HTML to WebGPU",
+  icon: FiLayout,
+  color: '#818cf8',
 };
 
 const categories = [
@@ -286,164 +289,13 @@ const categories = [
   },
 ];
 
-const totalConcepts = categories.reduce((sum, c) => sum + c.concepts.length, 0);
-
 export default function FrontendConcepts() {
-  const [activeCategory, setActiveCategory] = useState(null);
-  const [search, setSearch] = useState("");
-  const [expandedId, setExpandedId] = useState(null);
-
-  const filteredCategories = categories
-    .map((cat) => ({
-      ...cat,
-      concepts: cat.concepts.filter(
-        (c) =>
-          c.name.toLowerCase().includes(search.toLowerCase()) ||
-          c.desc.toLowerCase().includes(search.toLowerCase())
-      ),
-    }))
-    .filter((cat) => cat.concepts.length > 0);
-
-  const displayCategories = activeCategory
-    ? filteredCategories.filter((c) => c.name === activeCategory)
-    : filteredCategories;
-
-  const matchCount = filteredCategories.reduce(
-    (sum, c) => sum + c.concepts.length,
-    0
-  );
-
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#050609",
-        color: "#C8C8DE",
-        fontFamily: "'Geist Mono', 'SF Mono', 'JetBrains Mono', monospace",
-      }}
-    >
-      <div
-        style={{
-          padding: "40px 32px 24px",
-          borderBottom: "1px solid rgba(255,255,255,0.035)",
-          background:
-            "linear-gradient(180deg, rgba(97,218,251,0.04) 0%, transparent 100%)",
-        }}
-      >
-        <div style={{ maxWidth: 960, margin: "0 auto" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
-            <span style={{ fontSize: 11, letterSpacing: 4, textTransform: "uppercase", color: "#61DAFB", fontWeight: 600 }}>
-              Reference Guide
-            </span>
-            <span style={{ fontSize: 10, background: "rgba(97,218,251,0.1)", color: "#61DAFB", padding: "2px 8px", borderRadius: 3, letterSpacing: 1 }}>
-              {totalConcepts} CONCEPTS
-            </span>
-          </div>
-          <h1 style={{ fontSize: 28, fontWeight: 700, margin: "8px 0 6px", color: "#F5F5FF", letterSpacing: -0.5, fontFamily: "'Geist', 'Inter', system-ui, sans-serif" }}>
-            Frontend Development Concepts
-          </h1>
-          <p style={{ fontSize: 13, color: "#505068", margin: 0, lineHeight: 1.5 }}>
-            HTML to WebGPU — everything a modern frontend engineer needs to know
-          </p>
-
-          <div style={{ marginTop: 20, position: "relative" }}>
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search concepts..."
-              style={{
-                width: "100%", padding: "10px 16px 10px 36px",
-                background: "rgba(255,255,255,0.022)", border: "1px solid rgba(255,255,255,0.05)",
-                borderRadius: 8, color: "#C8C8DE", fontSize: 13, fontFamily: "inherit", outline: "none", boxSizing: "border-box",
-              }}
-            />
-            <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "#333", fontSize: 14 }}>⌕</span>
-            {search && (
-              <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", color: "#505068", fontSize: 11 }}>
-                {matchCount} results
-              </span>
-            )}
-          </div>
-
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 16 }}>
-            <button
-              onClick={() => setActiveCategory(null)}
-              style={{
-                padding: "5px 12px", fontSize: 11, borderRadius: 4, border: "1px solid",
-                borderColor: !activeCategory ? "rgba(97,218,251,0.4)" : "rgba(255,255,255,0.05)",
-                background: !activeCategory ? "rgba(97,218,251,0.08)" : "transparent",
-                color: !activeCategory ? "#61DAFB" : "#505068",
-                cursor: "pointer", fontFamily: "inherit", letterSpacing: 0.3, transition: "all 0.15s",
-              }}
-            >All</button>
-            {categories.map((cat) => (
-              <button
-                key={cat.name}
-                onClick={() => setActiveCategory(activeCategory === cat.name ? null : cat.name)}
-                style={{
-                  padding: "5px 12px", fontSize: 11, borderRadius: 4, border: "1px solid",
-                  borderColor: activeCategory === cat.name ? `${cat.color}66` : "rgba(255,255,255,0.05)",
-                  background: activeCategory === cat.name ? `${cat.color}10` : "transparent",
-                  color: activeCategory === cat.name ? cat.color : "#505068",
-                  cursor: "pointer", fontFamily: "inherit", letterSpacing: 0.3, transition: "all 0.15s",
-                }}
-              >
-                <span style={{ marginRight: 4 }}>{cat.icon}</span>
-                {cat.name}
-                <span style={{ marginLeft: 4, opacity: 0.5 }}>{cat.concepts.length}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div style={{ maxWidth: 960, margin: "0 auto", padding: "24px 32px 60px" }}>
-        {displayCategories.map((cat) => (
-          <div key={cat.name} style={{ marginBottom: 32 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, paddingBottom: 8, borderBottom: `1px solid ${cat.color}14` }}>
-              <span style={{ color: cat.color, fontSize: 16 }}>{cat.icon}</span>
-              <h2 style={{ fontSize: 15, fontWeight: 600, color: cat.color, margin: 0, letterSpacing: 0.5, fontFamily: "'Geist', system-ui, sans-serif" }}>
-                {cat.name}
-              </h2>
-              <span style={{ fontSize: 10, color: "#2A2A3A", marginLeft: "auto" }}>{cat.concepts.length} concepts</span>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-              {cat.concepts.map((concept) => {
-                const isExpanded = expandedId === concept.id;
-                return (
-                  <div
-                    key={concept.id}
-                    onClick={() => setExpandedId(isExpanded ? null : concept.id)}
-                    style={{
-                      padding: isExpanded ? "12px 16px" : "9px 16px",
-                      background: isExpanded ? `${cat.color}05` : "rgba(255,255,255,0.007)",
-                      border: "1px solid",
-                      borderColor: isExpanded ? `${cat.color}20` : "rgba(255,255,255,0.02)",
-                      borderRadius: 6, cursor: "pointer", transition: "all 0.15s ease",
-                    }}
-                  >
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <span style={{ fontSize: 9, color: "#2A2A3A", minWidth: 24, fontVariantNumeric: "tabular-nums" }}>
-                        {String(concept.id).padStart(3, "0")}
-                      </span>
-                      <span style={{ fontSize: 13, fontWeight: 500, color: isExpanded ? "#F5F5FF" : "#9090A8", flex: 1 }}>
-                        {concept.name}
-                      </span>
-                      <span style={{ fontSize: 10, color: "#1E1E2E", transform: isExpanded ? "rotate(90deg)" : "none", transition: "transform 0.15s" }}>▸</span>
-                    </div>
-                    {isExpanded && (
-                      <div style={{ marginTop: 10, marginLeft: 34, fontSize: 12, lineHeight: 1.7, color: "#686888", borderLeft: `2px solid ${cat.color}20`, paddingLeft: 12 }}>
-                        {concept.desc}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    <ConceptLayout
+      title="Frontend Development Concepts"
+      subtitle="HTML to WebGPU — everything a modern frontend engineer needs to know"
+      accentColor="#61DAFB"
+      categories={categories}
+    />
   );
 }
