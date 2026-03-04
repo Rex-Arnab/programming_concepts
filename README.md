@@ -28,8 +28,9 @@ A static React SPA hosting interactive reference guides for core programming and
 | Progressive Web Apps | 85 | ✓ Complete |
 | API Design | 88 | ✓ Complete |
 | Web Performance | 86 | ✓ Complete |
+| Data Structures & Algorithms | 136 | ✓ Complete |
 
-**Total: 2,152 concepts across 18 domains**
+**Total: 2,288 concepts across 19 domains**
 
 ---
 
@@ -117,7 +118,7 @@ npm run preview   # preview production build
 ### Pending Topics
 
 #### CS Fundamentals
-1. [ ] Data Structures & Algorithms                                 
+1. [x] Data Structures & Algorithms                                 
 2. [ ] Computer Architecture                     
 3. [ ] Operating Systems
 4. [ ] Compiler Design & Programming Languages
