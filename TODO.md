@@ -6,6 +6,13 @@ Each concept needs its one-liner `desc` expanded to a detailed markdown explanat
 
 ---
 
+## Engineering Process & Leadership (130 concepts) — `Engineering_Process_Leadership_concepts.jsx` ✓ COMPLETE
+
+All 130 concepts written with rich descriptions across 12 subcategories (IDs 548–677).
+Subcategories: Engineering Fundamentals & Mindset (SOLID, DRY, Conway's Law, Technical Debt, YAGNI), Software Development Lifecycle (SDLC, Requirements, Prototyping, Waterfall, CI/CD, Release Management), Agile & Lean Methods (Agile Manifesto, Scrum, Kanban, Lean, Sprint ceremonies, Definition of Done, Shape Up), Engineering Practices (TDD, Pair Programming, Trunk-Based Dev, Feature Flags, CI culture, Mob Programming, XP), Technical Design & Documentation (ADRs, RFC process, Tech Specs, Design Reviews, Tech Stack Selection, API Design, Build vs Buy), Code Quality & Standards (Clean Code, Code Smells, Linting, Code Coverage, Technical Debt, Coding Standards, DORA Metrics, Security Shift Left), Technical Leadership (Staff/Principal/Tech Lead/Architect roles, Technical Vision, Influence Without Authority, Technical Roadmap, Mentoring, Technical Interviewing), Engineering Management (EM Role, IC vs Manager Track, 1:1s, Performance Reviews, Career Ladders, Hiring, Onboarding, Team Topologies, Delegation, Managing Up), Team Dynamics & Communication (Psychological Safety, Feedback Culture, Blameless Culture, Async vs Sync, Remote Teams, Knowledge Sharing, Conflict Resolution, Cross-Functional), Incident Management & Reliability Culture (Incident Process, On-Call, SLOs/SLAs/SLIs, Postmortems, Runbooks, MTTD/MTTR, Chaos Engineering, Error Budgets), Developer Experience & Productivity (DX, Flow State, Cognitive Load, SPACE Framework, Inner Development Loop, Platform Engineering, Developer Tooling, Developer Onboarding), Engineering Strategy & Culture (Engineering Strategy, Technology Radar, Technical Due Diligence, Build vs Buy vs Partner, Engineering OKRs, Innovation Culture, Long-term Trade-offs, Open Source Strategy, Org Design, Technical Governance, Engineering Philosophy).
+
+---
+
 ## Analytics & Conversion (114 concepts) — `Analytics_Conversion_concepts.jsx` ✓ COMPLETE
 
 All 114 concepts written with rich descriptions across 11 subcategories (IDs 434–547).

@@ -1,53 +1,111 @@
 # Programming Concepts
 
-A static React site hosting interactive reference guides for core programming and engineering concepts. Built with Vite, deployed on GitHub Pages.
+A static React SPA hosting interactive reference guides for core programming and engineering concepts. Built with Vite + React Router + Tailwind CSS, deployed on GitHub Pages.
 
 **Live:** [https://arnabbiswas.github.io/ProgrammingConcepts/](https://arnabbiswas.github.io/ProgrammingConcepts/)
 
-## Concepts Covered
+---
 
-- Frontend Development
-- Backend Development
-- System Design
-- DevOps
-- Testing
-- AI / Machine Learning
-- Marketing
-- Automation
+## Concept Pages
 
-## Adding a New Concept
+| Page | Concepts | Status |
+|---|---|---|
+| Frontend Development | 180 | In progress |
+| Backend Development | 175 | In progress |
+| System Design | 120 | In progress |
+| DevOps | 165 | In progress |
+| Testing | 175 | In progress |
+| AI Concepts | 180 | In progress |
+| Marketing | 150 | In progress |
+| Automation | 102 | ✓ Complete |
+| Cross-Platform Mobile | 138 | ✓ Complete |
+| Analytics & Conversion | 114 | ✓ Complete |
+| Engineering Process & Leadership | 130 | ✓ Complete |
 
-Create a `.jsx` file in `src/concepts/`:
+**Total: 1,429 concepts across 11 domains**
+
+---
+
+## Architecture
+
+Each concept page follows a data-file-per-category pattern:
+
+```
+src/concepts/
+  Analytics_Conversion_concepts.jsx   ← entry file (imports data + exports meta)
+  analytics-data/
+    foundations.js                    ← { name, icon, color, concepts: [{id, name, desc}] }
+    web-analytics.js
+    ...
+```
+
+The entry file auto-registers via `import.meta.glob('./*.jsx')` in `src/concepts/index.js` — no manual route registration needed.
+
+### Entry file shape
 
 ```jsx
-import { useState } from "react";
+import { FiBarChart2 } from 'react-icons/fi';
+import ConceptLayout from '../ConceptLayout';
+import foundations from './my-data/foundations';
+// ... more imports
+
+const categories = [foundations, /* ... */];
 
 export const meta = {
-  title: "Your Topic",
-  description: "Short description",
+  title: "My Topic",
+  description: "Short description for the home card",
+  icon: FiBarChart2,
+  color: '#hexcolor',
+  conceptCount: categories.reduce((sum, cat) => sum + cat.concepts.length, 0),
 };
 
-export default function YourTopic() {
-  return <div>...</div>;
+export default function MyTopicConcepts() {
+  return (
+    <ConceptLayout
+      title="My Topic"
+      subtitle="Subtitle shown on the concept page"
+      accentColor="#hexcolor"
+      categories={categories}
+    />
+  );
 }
 ```
 
-It auto-registers via `import.meta.glob` -- no manual imports needed.
+### Data file shape
+
+```js
+const myCategory = {
+  name: "Category Name",
+  icon: "📦",
+  color: "#6366f1",
+  concepts: [
+    {
+      id: 1,                // sequential, unique across ALL data files
+      name: "Concept Name",
+      desc: `**Bold term** — clear definition. Mental model. Trade-offs. Key insight.`,
+    },
+  ],
+};
+
+export default myCategory;
+```
+
+> **Note:** Do not use backtick characters inside `desc` template literals — they break the template literal. Use double quotes for inline code references instead.
+
+---
 
 ## Development
 
 ```bash
 npm install
-npm run dev
-```
-
-## Build
-
-```bash
-npm run build
+npm run dev       # http://localhost:5173
+npm run build     # production build → /dist
+npm run lint      # ESLint
+npm run preview   # preview production build
 ```
 
 ---
+
 
 ### Pending Topics
 
@@ -89,7 +147,7 @@ npm run build
 ### Architecture & Design
 
 21. [x] System Design
-22. [ ] Software Architecture (SOLID, DDD, Clean Architecture)
+22. [ ] Software Architecture (SOLID, DDD, Clean Architecture, Hexagonal)
 23. [ ] Distributed Systems
 24. [ ] Microservices & Service Mesh
 25. [ ] Event-Driven Architecture
@@ -132,7 +190,7 @@ npm run build
 
 47. [ ] Application Security (AppSec / OWASP)
 48. [ ] Network Security
-49. [ ] Cloud Security
+49. [ ] Cloud Security & IAM
 50. [ ] Cryptography
 51. [ ] Identity & Access Management (IAM / Zero Trust)
 52. [ ] Penetration Testing & Red Teaming
