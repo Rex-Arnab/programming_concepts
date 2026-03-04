@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function ConceptModal({
   concept,
@@ -142,7 +143,7 @@ export default function ConceptModal({
               className="text-[14px] leading-[1.85] text-(--color-text-secondary) markdown-content pl-5"
               style={{ borderLeft: `3px solid ${categoryColor}40` }}
             >
-              <ReactMarkdown>{concept.desc}</ReactMarkdown>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{concept.desc}</ReactMarkdown>
             </div>
           </div>
 

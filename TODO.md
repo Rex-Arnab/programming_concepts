@@ -6,6 +6,13 @@ Each concept needs its one-liner `desc` expanded to a detailed markdown explanat
 
 ---
 
+## Automation (102 concepts) — `Automation_concepts.jsx` ✓ COMPLETE
+
+All 102 concepts written with rich descriptions across 10 subcategories (IDs 194–295).
+Subcategories: Foundations, Workflow Automation (n8n, Zapier, Make), Browser & Web Automation (Selenium, Playwright), RPA (UiPath, AA, Blue Prism), Task Scheduling (Airflow, Prefect, Temporal), Script & Desktop, API & Event-Driven, AI-Powered (LangChain, CrewAI, Computer Use), Test Automation, Patterns & Best Practices.
+
+---
+
 ## Marketing (150 concepts) — `Marketing_conepts.jsx`
 
 ### Fundamentals (14) ✓
