@@ -30,8 +30,9 @@ A static React SPA hosting interactive reference guides for core programming and
 | Web Performance | 86 | ✓ Complete |
 | Data Structures & Algorithms | 136 | ✓ Complete |
 | Business & Entrepreneurship | 108 | ✓ Complete |
+| Vibe Coding | 106 | ✓ Complete |
 
-**Total: 2,396 concepts across 20 domains**
+**Total: 2,502 concepts across 21 domains**
 
 ---
 
