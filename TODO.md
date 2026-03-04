@@ -6,6 +6,13 @@ Each concept needs its one-liner `desc` expanded to a detailed markdown explanat
 
 ---
 
+## Databases (128 concepts) — `Databases_concepts.jsx` ✓ COMPLETE
+
+All 128 concepts written with rich descriptions across 12 subcategories (IDs 908–1035).
+Subcategories: Database Fundamentals (ACID, BASE, CAP, PACELC, Consistency Models, Isolation Levels, Indexing, Keys, Normalization, Denormalization), SQL & Relational (Relational Model, SQL Fundamentals, JOINs, Subqueries/CTEs, Window Functions, Stored Procedures, Views/Materialized Views, Triggers, PostgreSQL, MySQL, Schema Migrations, Full-Text Search), NoSQL (Why NoSQL, MongoDB, Redis, Cassandra, Neo4j, Time-Series DBs, Elasticsearch, Vector Databases, DynamoDB, NoSQL Modeling, SQL vs NoSQL, Multi-model), NewSQL & Distributed (NewSQL, CockroachDB, Google Spanner, Raft/Paxos, 2PC, Distributed Transactions, TiDB, YugabyteDB, GSI, HTAP, Geo-Distribution), Data Modeling (ER Modeling, Normal Forms, Star Schema, Snowflake Schema, SCDs, JSON/JSONB, Event Sourcing, Sharding Strategies, Multi-Tenancy, Polymorphic Associations), Query Performance (Index Types, EXPLAIN ANALYZE, N+1 Problem, Partitioning, Connection Pooling, Read Replicas, Covering Indexes, VACUUM/Bloat, Slow Query Analysis, Query Hints), Data Engineering (Data Engineering, ETL vs ELT, Pipeline Architecture, Apache Airflow, dbt, CDC, Stream vs Batch, Data Quality, Data Lineage, Metadata Management, Data Contracts, Reverse ETL), Data Warehousing & OLAP (OLAP vs OLTP, Kimball/Inmon, Snowflake DW, BigQuery, Redshift, Columnar Storage, Lakehouse, OLAP Cubes, Data Marts, MPP), Big Data & Streaming (Big Data 3Vs, Hadoop/HDFS, MapReduce, Apache Spark, Apache Kafka, Apache Flink, Lambda Architecture, Kappa Architecture, Delta Lake/Iceberg, Stream Processing, Data Lake, Apache Hive), Data Science & Analytics (Data Science, EDA, Feature Engineering, Statistical Fundamentals, Pandas/DataFrames, SQL for Analytics, BI Tools, A/B Testing, ML Feature Stores, Analytical Engineering), Database Operations (Backup/Recovery, Replication, HA/Failover, Zero-Downtime Migrations, Monitoring, Lock Contention/Deadlocks, PITR, RLS, Encryption, Database as Code), Advanced & Emerging (LSM-Tree vs B-Tree, WAL, MVCC, Serverless Databases, DuckDB, Vector Search at Scale, DB Proxy/Middleware, ClickHouse, TimescaleDB, AI/ML in Databases).
+
+---
+
 ## Networking (114 concepts) — `Networking_concepts.jsx` ✓ COMPLETE
 
 All 114 concepts written with rich descriptions across 11 subcategories (IDs 794–907).

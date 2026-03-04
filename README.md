@@ -23,8 +23,9 @@ A static React SPA hosting interactive reference guides for core programming and
 | Engineering Process & Leadership | 130 | ✓ Complete |
 | Design & UX | 116 | ✓ Complete |
 | Networking | 114 | ✓ Complete |
+| Databases | 128 | ✓ Complete |
 
-**Total: 1,659 concepts across 13 domains**
+**Total: 1,787 concepts across 14 domains**
 
 ---
 
@@ -158,11 +159,11 @@ npm run preview   # preview production build
 ---
 ### Data
 
-27. [ ] Databases (SQL, NoSQL, NewSQL)
-28. [ ] Data Engineering (Pipelines, ETL/ELT)
-29. [ ] Data Warehousing & OLAP
-30. [ ] Big Data (Spark, Hadoop, streaming)
-31. [ ] Data Science & Analytics
+27. [x] Databases (SQL, NoSQL, NewSQL)
+28. [x] Data Engineering (Pipelines, ETL/ELT)
+29. [x] Data Warehousing & OLAP
+30. [x] Big Data (Spark, Hadoop, streaming)
+31. [x] Data Science & Analytics
 
 ---
 ### AI / ML
@@ -202,15 +203,15 @@ npm run preview   # preview production build
 ---
 ### Networking
 
-55. [ ] Networking Fundamentals (TCP/IP, DNS, HTTP)
-56. [ ] Network Protocols (BGP, OSPF, QUIC)
-57. [ ] CDN & Edge Computing
-58. [ ] Network Engineering & Administration
+55. [x] Networking Fundamentals (TCP/IP, DNS, HTTP)
+56. [x] Network Protocols (BGP, OSPF, QUIC)
+57. [x] CDN & Edge Computing
+58. [x] Network Engineering & Administration
 
 ---
 ### Quality & Testing
 
-59. [x] Software Testing (Unit, Integration, E2E)
+59. [~] Software Testing (Unit, Integration, E2E)
 60. [x] Test Automation
 61. [x] Performance & Load Testing
 62. [x] QA Engineering & Methodology
@@ -218,10 +219,10 @@ npm run preview   # preview production build
 ---
 ### Developer Experience & Tooling
 
-63. [ ] Version Control & Git Workflows
+63. [x] Version Control & Git Workflows
 64. [ ] Developer Tools & Productivity
-65. [ ] Documentation Engineering
-66. [ ] Code Review & Static Analysis
+65. [x] Documentation Engineering
+66. [x] Code Review & Static Analysis
 
 ---
 ### Domain-Specific Engineering
@@ -239,17 +240,17 @@ npm run preview   # preview production build
 ---
 ### Design & UX (Engineering-adjacent)
 
-76. [ ] UI/UX Design
-77. [ ] Design Systems
-78. [ ] Information Architecture
-79. [ ] Human-Computer Interaction (HCI)
+76. [x] UI/UX Design
+77. [x] Design Systems
+78. [x] Information Architecture
+79. [x] Human-Computer Interaction (HCI)
 
 ---
 ### Engineering Process & Leadership
 
-80. [ ] Agile, Scrum & Engineering Methodologies
+80. [x] Agile, Scrum & Engineering Methodologies
 81. [ ] Technical Leadership & Engineering Management
-82. [ ] Software Engineering Principles (TDD, BDD, DDD)
+82. [~] Software Engineering Principles (TDD, BDD, DDD)
 83. [ ] Product Management for Engineers
 
 ---
