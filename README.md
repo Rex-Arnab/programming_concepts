@@ -29,8 +29,9 @@ A static React SPA hosting interactive reference guides for core programming and
 | API Design | 88 | ✓ Complete |
 | Web Performance | 86 | ✓ Complete |
 | Data Structures & Algorithms | 136 | ✓ Complete |
+| Business & Entrepreneurship | 108 | ✓ Complete |
 
-**Total: 2,288 concepts across 19 domains**
+**Total: 2,396 concepts across 20 domains**
 
 ---
 
