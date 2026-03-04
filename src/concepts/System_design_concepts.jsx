@@ -12,11 +12,16 @@ import scalabilityPatterns from './system-design-data/scalability-patterns';
 import reliabilityResilience from './system-design-data/reliability-resilience';
 import observabilityOperations from './system-design-data/observability-operations';
 import advancedDistributed from './system-design-data/advanced-distributed';
+import cloudDesignPatterns from './system-design-data/cloud-design-patterns';
+import performanceAntipatterns from './system-design-data/performance-antipatterns';
+import estimationTradeoffs from './system-design-data/estimation-tradeoffs';
+import philosophyPrinciples from './system-design-data/philosophy-principles';
 
 const categories = [
   fundamentals, networkingCommunication, dataDatabases, caching,
   loadBalancingProxies, architecturePatterns, messagingStreaming, securityAuth,
   scalabilityPatterns, reliabilityResilience, observabilityOperations, advancedDistributed,
+  cloudDesignPatterns, performanceAntipatterns, estimationTradeoffs, philosophyPrinciples,
 ];
 
 export const meta = {
