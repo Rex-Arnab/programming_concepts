@@ -24,8 +24,9 @@ A static React SPA hosting interactive reference guides for core programming and
 | Design & UX | 116 | ✓ Complete |
 | Networking | 114 | ✓ Complete |
 | Databases | 128 | ✓ Complete |
+| Security | 106 | ✓ Complete |
 
-**Total: 1,787 concepts across 14 domains**
+**Total: 1,893 concepts across 15 domains**
 
 ---
 
@@ -136,7 +137,7 @@ npm run preview   # preview production build
 
 14. [ ] iOS Development
 15. [ ] Android Development
-16. [ ] Cross-Platform Mobile (React Native, Flutter)
+16. [x] Cross-Platform Mobile (React Native, Flutter)
 
 ---
 ### Systems & Low-Level
@@ -191,14 +192,14 @@ npm run preview   # preview production build
 ---
 ### Security
 
-47. [ ] Application Security (AppSec / OWASP)
-48. [ ] Network Security
-49. [ ] Cloud Security & IAM
-50. [ ] Cryptography
-51. [ ] Identity & Access Management (IAM / Zero Trust)
-52. [ ] Penetration Testing & Red Teaming
-53. [ ] DevSecOps
-54. [ ] Threat Modeling
+47. [x] Application Security (AppSec / OWASP)
+48. [x] Network Security
+49. [x] Cloud Security & IAM
+50. [x] Cryptography
+51. [x] Identity & Access Management (IAM / Zero Trust)
+52. [x] Penetration Testing & Red Teaming
+53. [x] DevSecOps
+54. [x] Threat Modeling
 
 ---
 ### Networking

@@ -6,6 +6,13 @@ Each concept needs its one-liner `desc` expanded to a detailed markdown explanat
 
 ---
 
+## Security (106 concepts) — `Security_concepts.jsx` ✓ COMPLETE
+
+All 106 concepts written with rich descriptions across 10 subcategories (IDs 1036–1141).
+Subcategories: AppSec & OWASP (OWASP Top 10, SQL Injection, XSS, CSRF, Broken Access Control/IDOR, Authentication Vulnerabilities, Security Misconfiguration, Sensitive Data Exposure, SSRF, Insecure Deserialization, XXE, Injection Attacks), Cryptography (Symmetric Encryption, Asymmetric Encryption, Hash Functions, Digital Signatures, PKI, TLS/SSL, Key Management/HSMs, Perfect Forward Secrecy, E2EE, Zero-Knowledge Proofs, Cryptographic Randomness, Post-Quantum Cryptography), Identity & Access Management (AuthN vs AuthZ, OAuth 2.0, OIDC, SAML 2.0, JWT, MFA, RBAC, ABAC/ReBAC, Zero Trust Architecture, SSO, PAM, LDAP/Active Directory), Network Security (Firewalls, IDS/IPS, VPN/Tunneling, DDoS Mitigation, MitM Attacks, Network Segmentation, DNS Security, Wireless Security, Network Traffic Analysis, TLS Certificate Management), Cloud Security (Shared Responsibility Model, IAM Least Privilege, Secrets Management, CSPM, Container/Kubernetes Security, S3/Cloud Storage Security, Cloud Audit Logging, Serverless Security, CIEM, Cloud Security Architecture), Threat Modeling (What is Threat Modeling, STRIDE, MITRE ATT&CK, Data Flow Diagrams, Attack Trees, PASTA, Cyber Kill Chain, Risk Assessment, Threat Intelligence, Threat Modeling Tools), Penetration Testing & Red Teaming (Methodology, Reconnaissance/OSINT, Vulnerability Scanning, Exploitation Frameworks, Web App Pentesting, Red/Blue/Purple Team, Social Engineering/Phishing, Privilege Escalation, Bug Bounty, Lateral Movement), DevSecOps (Shift Left Security, SAST, DAST, SCA, Secret Scanning, Container Image Security, Security in CI/CD, SBOM, IaC Security, Security Champions), Security Operations (SOC, SIEM, Incident Response Lifecycle, Digital Forensics, Threat Hunting, Security Metrics, Vulnerability Management, Security Awareness Training, Tabletop Exercises, SOAR), Advanced & Emerging (Zero-Day Vulnerabilities, APTs, Supply Chain Security, AI-Powered Security, Ransomware, Hardware Security/TPM/HSM, PETs/Privacy-Enhancing Technologies, Smart Contract Security, Insider Threats, Security Chaos Engineering).
+
+---
+
 ## Databases (128 concepts) — `Databases_concepts.jsx` ✓ COMPLETE
 
 All 128 concepts written with rich descriptions across 12 subcategories (IDs 908–1035).
