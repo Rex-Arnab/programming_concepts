@@ -1,0 +1,28 @@
+const testAutomation = {
+  name: "Test Automation",
+  icon: "⊞",
+  color: "#8B5CF6",
+  concepts: [
+    { id: 74, name: "Test Automation", desc: "Using software tools to execute tests, compare results, and report outcomes automatically. Faster, repeatable, and more reliable than manual testing at scale." },
+    { id: 75, name: "Testing Pyramid", desc: "Strategy: many fast unit tests at the base, fewer integration tests in the middle, fewest slow E2E tests at the top. Inverted pyramids are expensive and flaky." },
+    { id: 76, name: "Testing Trophy", desc: "Kent C. Dodds' model for frontend: static analysis at base → unit → integration (largest layer) → E2E at top. Emphasizes integration tests over unit tests." },
+    { id: 77, name: "Testing Diamond / Honeycomb", desc: "Alternative models emphasizing integration tests as the largest layer. Reflects microservices reality where service interactions are the riskiest area." },
+    { id: 78, name: "Test Automation Frameworks", desc: "Structured platforms for writing and running automated tests. Jest, pytest, JUnit, Mocha, Vitest, xUnit. Provide assertions, runners, reporters, and hooks." },
+    { id: 79, name: "Page Object Model (POM)", desc: "Design pattern for UI test automation. Each page has a class encapsulating its elements and interactions. Reduces duplication and improves maintainability." },
+    { id: 80, name: "Screenplay Pattern", desc: "Actor-centric test design pattern. Actors perform tasks using abilities. More readable and scalable than Page Object Model for complex workflows." },
+    { id: 81, name: "Test Fixtures", desc: "Predefined state or data needed before tests run. Setup and teardown logic. Database seeding, mock data, file creation. Consistent starting point." },
+    { id: 82, name: "Assertions", desc: "Statements verifying expected outcomes. assertEquals, assertTrue, toContain, toHaveBeenCalled. The 'judge' in every test case. One assertion per test ideally." },
+    { id: 83, name: "Test Doubles (Overview)", desc: "Generic term for any fake object used in testing. Includes mocks, stubs, spies, fakes, and dummies. Replace real dependencies with controlled alternatives." },
+    { id: 84, name: "Mocks", desc: "Objects with pre-programmed expectations about calls they'll receive. Verify behavior: was this method called with these arguments? Jest mock, Mockito." },
+    { id: 85, name: "Stubs", desc: "Objects providing canned responses to calls made during tests. Control what data a dependency returns without verifying how it's called." },
+    { id: 86, name: "Spies", desc: "Wrappers around real objects that record calls while still executing the original code. Observe behavior without replacing functionality. Jest spyOn." },
+    { id: 87, name: "Fakes", desc: "Working implementations with shortcuts. In-memory database instead of real DB, local file system instead of S3. Simplified but functional." },
+    { id: 88, name: "Flaky Tests", desc: "Tests that pass and fail inconsistently without code changes. Causes: timing issues, shared state, external dependencies, race conditions. Must be quarantined." },
+    { id: 89, name: "Test Isolation", desc: "Each test is independent — no shared state, no execution order dependencies. Tests can run in parallel without interference. Reset state between tests." },
+    { id: 90, name: "Parallel Test Execution", desc: "Running tests simultaneously across multiple threads, processes, or machines. Dramatically reduces suite execution time. Requires proper test isolation." },
+    { id: 91, name: "Test Reporting", desc: "Generating human-readable test results: pass/fail counts, duration, screenshots on failure, trend charts. Allure, JUnit XML, HTML reporters." },
+    { id: 92, name: "Code Coverage Metrics", desc: "Line coverage, branch coverage, function coverage, statement coverage. Tools: Istanbul/nyc, JaCoCo, coverage.py. Aim for meaningful coverage, not 100%." },
+    { id: 93, name: "Mutation Testing", desc: "Introducing small code changes (mutants) to verify tests catch them. If a test passes with mutated code, it's weak. Stryker, PITest. Measures test quality." },
+  ],
+};
+export default testAutomation;

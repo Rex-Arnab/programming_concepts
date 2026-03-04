@@ -1,0 +1,25 @@
+const llms = {
+  name: "Large Language Models (LLMs)",
+  icon: "◈",
+  color: "#F97316",
+  concepts: [
+    { id: 46, name: "Large Language Models (LLMs)", desc: "Transformer-based models trained on massive text corpora. Predict next tokens. Emergent capabilities at scale: reasoning, coding, analysis. GPT-4, Claude, Gemini, Llama." },
+    { id: 47, name: "Tokenization", desc: "Converting text to numerical tokens. BPE (Byte Pair Encoding), WordPiece, SentencePiece. Subword tokenization balances vocabulary size and coverage. 1 token ≈ 0.75 English words." },
+    { id: 48, name: "Context Window", desc: "Maximum tokens an LLM can process at once. GPT-4: 128K, Claude: 200K, Gemini: 1M+. Longer context enables more information but increases cost and may reduce attention quality." },
+    { id: 49, name: "Pre-Training", desc: "Initial training on massive unlabeled text. Next-token prediction (causal LM) or masked language modeling. Requires enormous compute (thousands of GPUs, months). Creates base model." },
+    { id: 50, name: "Fine-Tuning", desc: "Adapting a pre-trained model to a specific task or domain with smaller labeled data. Full fine-tuning (all weights) or parameter-efficient methods (LoRA, QLoRA). Much cheaper than pre-training." },
+    { id: 51, name: "Instruction Tuning", desc: "Fine-tuning on instruction-response pairs to follow human commands. Makes base models conversational and helpful. FLAN, InstructGPT methodology. Bridges pre-training to usefulness." },
+    { id: 52, name: "RLHF (Reinforcement Learning from Human Feedback)", desc: "Training models to align with human preferences. Collect human comparisons → train reward model → optimize policy with PPO. Key to making LLMs helpful, harmless, honest." },
+    { id: 53, name: "DPO (Direct Preference Optimization)", desc: "Simpler alternative to RLHF. Directly optimizes policy from preference data without a separate reward model. Equivalent to RLHF under certain assumptions. Gaining popularity." },
+    { id: 54, name: "Constitutional AI (CAI)", desc: "Anthropic's approach: AI critiques and revises its own outputs using a set of principles (constitution). RLAIF — AI feedback instead of human feedback. Scalable alignment." },
+    { id: 55, name: "Prompt Engineering", desc: "Crafting inputs to get desired outputs. Zero-shot, few-shot examples, chain-of-thought, role-playing, system prompts. Crucial skill for working with LLMs effectively." },
+    { id: 56, name: "Chain-of-Thought (CoT) Prompting", desc: "Instructing the model to show reasoning steps before answering. 'Let's think step by step.' Dramatically improves math, logic, and complex reasoning performance." },
+    { id: 57, name: "Few-Shot / Zero-Shot / One-Shot Learning", desc: "Zero-shot: no examples. One-shot: one example. Few-shot: several examples in the prompt. Models learn task format from examples. In-context learning without parameter updates." },
+    { id: 58, name: "Temperature & Sampling", desc: "Temperature controls randomness: 0 = deterministic, 1 = creative. Top-k: sample from top K tokens. Top-p (nucleus): sample from tokens covering p probability mass. Greedy vs sampling." },
+    { id: 59, name: "System Prompts", desc: "Instructions defining the model's behavior, role, and constraints. Set personality, output format, safety guardrails. Persistent context for the conversation. Most LLM APIs support them." },
+    { id: 60, name: "Hallucination", desc: "Model generates confident but incorrect or fabricated information. Caused by pattern matching without true understanding. Mitigations: RAG, grounding, chain-of-thought, citation." },
+    { id: 61, name: "Reasoning Models", desc: "Models specifically trained for complex reasoning. Extended thinking, chain-of-thought at inference. OpenAI o1/o3, Claude with extended thinking. Better at math, coding, logic." },
+    { id: 62, name: "Multimodal LLMs", desc: "Models processing multiple data types: text + images (GPT-4V, Claude Vision), text + audio, text + video. Vision-language models understand and generate across modalities." },
+  ],
+};
+export default llms;

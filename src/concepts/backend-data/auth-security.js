@@ -1,0 +1,26 @@
+const authSecurity = {
+  name: "Authentication & Security",
+  icon: "⬟",
+  color: "#EF4444",
+  concepts: [
+    { id: 71, name: "Authentication vs Authorization", desc: "Authentication (AuthN): verifying identity (who are you?). Authorization (AuthZ): verifying permissions (what can you do?). Different concerns handled differently." },
+    { id: 72, name: "Password Hashing", desc: "Never store plaintext passwords. bcrypt, scrypt, Argon2 with salt. Cost factor / work factor controls computational expense. Argon2id is the current recommendation." },
+    { id: 73, name: "JWT (JSON Web Tokens)", desc: "Self-contained tokens: header.payload.signature. Stateless authentication. Contains claims (user ID, roles, expiry). Signed with HMAC or RSA. Verify without DB lookup." },
+    { id: 74, name: "Session-Based Authentication", desc: "Server stores session in memory/DB/Redis, sends session ID cookie. Stateful. Easy to revoke. Cookie attributes: HttpOnly, Secure, SameSite, Path, Domain." },
+    { id: 75, name: "OAuth 2.0", desc: "Authorization framework for delegated access. Grant types: Authorization Code (+ PKCE), Client Credentials, Device Code. Access tokens + refresh tokens." },
+    { id: 76, name: "OpenID Connect (OIDC)", desc: "Identity layer on top of OAuth 2.0. Provides ID tokens (JWT) with user info. Standard claims (sub, email, name). SSO foundation. Auth0, Clerk, Keycloak implement it." },
+    { id: 77, name: "API Keys", desc: "Simple tokens identifying the calling application. Sent in headers or query params. Good for server-to-server. Not for user auth. Rate limit and rotate regularly." },
+    { id: 78, name: "Multi-Factor Authentication (MFA)", desc: "Something you know (password) + something you have (TOTP, SMS, hardware key) + something you are (biometric). TOTP (RFC 6238) preferred over SMS." },
+    { id: 79, name: "RBAC / ABAC / ReBAC", desc: "RBAC: Role-Based (admin, editor, viewer). ABAC: Attribute-Based (department=engineering AND level>3). ReBAC: Relationship-Based (owner of document). Increasing flexibility." },
+    { id: 80, name: "CORS (Cross-Origin Resource Sharing)", desc: "Browser security mechanism. Server declares which origins can access it via headers. Access-Control-Allow-Origin, Allow-Methods, Allow-Headers. Preflight OPTIONS requests." },
+    { id: 81, name: "CSRF Protection", desc: "Prevent forged requests from other sites. CSRF tokens in forms, SameSite cookies, double-submit cookie pattern, checking Origin/Referer headers." },
+    { id: 82, name: "SQL Injection Prevention", desc: "Use parameterized queries / prepared statements. Never interpolate user input into SQL strings. ORMs handle this by default. Still #1 vulnerability (OWASP)." },
+    { id: 83, name: "XSS Prevention (Backend)", desc: "Sanitize/escape output. Content-Security-Policy headers. HttpOnly cookies prevent JS access to session tokens. Validate and sanitize inputs server-side." },
+    { id: 84, name: "Encryption at Rest & in Transit", desc: "In transit: TLS 1.3 for all connections. At rest: AES-256 for stored data, encrypted database volumes, encrypted backups. Key management via KMS (AWS KMS, Vault)." },
+    { id: 85, name: "Secret Management", desc: "Storing API keys, DB passwords, tokens securely. HashiCorp Vault, AWS Secrets Manager, Doppler, SOPS. Never in code, never in env files committed to Git." },
+    { id: 86, name: "Rate Limiting & Throttling", desc: "Protecting APIs from abuse. Token bucket, sliding window, fixed window algorithms. Per-user, per-IP, per-API-key. Return 429 Too Many Requests with Retry-After." },
+    { id: 87, name: "Input Validation & Sanitization", desc: "Validate type, format, length, range server-side. Zod, Joi, class-validator, Pydantic. Sanitize HTML (DOMPurify). Reject early, fail securely." },
+    { id: 88, name: "OWASP Top 10", desc: "Top web security risks: Broken Access Control, Cryptographic Failures, Injection, Insecure Design, Security Misconfiguration, Vulnerable Components, Auth Failures, Data Integrity, Logging Failures, SSRF." },
+  ],
+};
+export default authSecurity;

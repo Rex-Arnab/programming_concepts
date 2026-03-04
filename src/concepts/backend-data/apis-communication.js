@@ -1,0 +1,25 @@
+const apisCommunication = {
+  name: "APIs & Communication",
+  icon: "⬢",
+  color: "#F97316",
+  concepts: [
+    { id: 24, name: "REST (Representational State Transfer)", desc: "Resource-based API design using HTTP methods. GET /users, POST /users, PUT /users/:id, DELETE /users/:id. Stateless. JSON responses. Most common API style." },
+    { id: 25, name: "RESTful Design Principles", desc: "Nouns for resources, HTTP verbs for actions. Plural naming (/users). Nested routes (/users/:id/orders). HATEOAS for discoverability. Consistent error responses." },
+    { id: 26, name: "GraphQL", desc: "Query language for APIs. Client specifies exact data needed. Single endpoint. Schema-defined types. Resolvers fetch data. Solves over/under-fetching. Apollo Server, Yoga." },
+    { id: 27, name: "gRPC", desc: "High-performance RPC framework by Google. Protocol Buffers (binary serialization). HTTP/2 multiplexing. Streaming (unary, server, client, bidirectional). Ideal for microservice communication." },
+    { id: 28, name: "WebSocket", desc: "Full-duplex persistent connection. Real-time bidirectional data. Chat, live feeds, gaming, collaborative editing. ws:// / wss:// protocol. Socket.IO adds fallbacks." },
+    { id: 29, name: "Server-Sent Events (SSE)", desc: "Server-to-client one-way streaming over HTTP. EventSource API. Auto-reconnection. Simpler than WebSocket for push notifications, live updates, progress tracking." },
+    { id: 30, name: "Webhooks", desc: "HTTP callbacks triggered by events. Server A sends POST to Server B's URL when something happens. No polling. GitHub webhooks, Stripe events, Slack notifications." },
+    { id: 31, name: "API Versioning", desc: "Managing API changes without breaking clients. URL path (/v1/users), header (Accept-Version), query param (?v=2). Deprecation policy and migration guides." },
+    { id: 32, name: "API Pagination", desc: "Returning data in pages. Offset-based (page=2&limit=20), cursor-based (after=abc123), keyset. Cursor-based is more performant for large datasets." },
+    { id: 33, name: "API Rate Limiting", desc: "Restricting request frequency to protect servers. Token bucket, sliding window, fixed window. Headers: X-RateLimit-Limit, X-RateLimit-Remaining, Retry-After." },
+    { id: 34, name: "HATEOAS", desc: "Hypermedia As The Engine Of Application State. API responses include links to related actions/resources. Self-documenting APIs. REST maturity level 3." },
+    { id: 35, name: "API Documentation (OpenAPI / Swagger)", desc: "Machine-readable API specification. OpenAPI 3.x is the standard. Swagger UI for interactive docs. Code generation for clients and servers. Postman collections." },
+    { id: 36, name: "tRPC", desc: "End-to-end type-safe APIs for TypeScript. No schema, no codegen. Server defines procedures, client calls with full type inference. Pairs with React Query." },
+    { id: 37, name: "JSON:API / HAL / JSON-LD", desc: "Standardized JSON response formats. JSON:API: relationships, pagination, sparse fieldsets. HAL: hyperlinks. JSON-LD: linked data with semantic context." },
+    { id: 38, name: "Long Polling vs Short Polling", desc: "Short polling: client repeatedly requests at intervals. Long polling: server holds request until data is available, then responds. Bridge to WebSocket/SSE." },
+    { id: 39, name: "Protocol Buffers (Protobuf)", desc: "Google's binary serialization format. Smaller, faster than JSON. Schema-defined (.proto files). Language-neutral code generation. Used with gRPC and data storage." },
+    { id: 40, name: "MessagePack / CBOR / Avro", desc: "Binary serialization alternatives. MessagePack: like JSON but binary. CBOR: self-describing binary. Avro: schema-based, Hadoop ecosystem. Smaller payloads, faster parsing." },
+  ],
+};
+export default apisCommunication;

@@ -148,6 +148,3 @@ Each concept needs its one-liner `desc` expanded to a detailed markdown explanat
 
 ---
 
-## Closures — `Closures.jsx`
-
-- [ ] (expand when ready)

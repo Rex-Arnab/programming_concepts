@@ -1,0 +1,27 @@
+const dataDatabases = {
+  name: "Data & Databases",
+  icon: "⬢",
+  color: "#2EBF6E",
+  concepts: [
+    { id: 24, name: "SQL vs NoSQL", desc: "SQL: structured, ACID, relational (PostgreSQL, MySQL). NoSQL: flexible schema, scalable (MongoDB, Redis, Cassandra)." },
+    { id: 25, name: "ACID Properties", desc: "Atomicity, Consistency, Isolation, Durability. Guarantees for reliable database transactions." },
+    { id: 26, name: "BASE Properties", desc: "Basically Available, Soft state, Eventually consistent. NoSQL alternative to ACID for distributed systems." },
+    { id: 27, name: "CAP Theorem", desc: "Distributed systems can guarantee only 2 of 3: Consistency, Availability, Partition Tolerance." },
+    { id: 28, name: "PACELC Theorem", desc: "Extension of CAP: if Partition, choose A or C; Else, choose Latency or Consistency." },
+    { id: 29, name: "Consistency Models", desc: "Strong, eventual, causal, read-your-writes. Defines when writes become visible to reads." },
+    { id: 30, name: "Data Replication", desc: "Copying data across multiple nodes for redundancy and read performance. Leader-follower, multi-leader, leaderless." },
+    { id: 31, name: "Read Replicas", desc: "Database copies that handle read queries, offloading the primary. Introduces replication lag." },
+    { id: 32, name: "Sharding / Data Partitioning", desc: "Splitting data across multiple databases by a shard key. Horizontal partitioning for scale." },
+    { id: 33, name: "Consistent Hashing", desc: "Distributes data across nodes minimizing redistribution when nodes join/leave. Used in caches and DBs." },
+    { id: 34, name: "Database Indexing", desc: "Data structures (B-tree, hash) for fast lookups. Trade-off: faster reads, slower writes, more storage." },
+    { id: 35, name: "Denormalization", desc: "Adding redundant data to reduce expensive joins. Improves read performance at the cost of write complexity." },
+    { id: 36, name: "Normalization", desc: "Organizing data to reduce redundancy (1NF, 2NF, 3NF). Ensures data integrity but may require joins." },
+    { id: 37, name: "Database Federation", desc: "Splitting databases by function (users DB, products DB, orders DB). Each scales independently." },
+    { id: 38, name: "Object Storage", desc: "Stores unstructured data as objects (S3, GCS). Ideal for images, videos, backups. Highly scalable." },
+    { id: 39, name: "Data Lakes & Data Warehouses", desc: "Lake: raw data in any format. Warehouse: structured, optimized for analytics (Redshift, BigQuery, Snowflake)." },
+    { id: 40, name: "Time-Series Databases", desc: "Optimized for timestamped data (InfluxDB, TimescaleDB). Used for metrics, IoT, monitoring." },
+    { id: 41, name: "Graph Databases", desc: "Store data as nodes and edges (Neo4j). Ideal for social networks, recommendations, fraud detection." },
+    { id: 42, name: "Vector Databases", desc: "Store and query high-dimensional embeddings (Pinecone, Weaviate). Powers semantic search and AI/RAG." },
+  ],
+};
+export default dataDatabases;

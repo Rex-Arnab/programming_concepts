@@ -1,0 +1,28 @@
+const containersOrchestration = {
+  name: "Containers & Orchestration",
+  icon: "⊞",
+  color: "#26C6DA",
+  concepts: [
+    { id: 35, name: "Containers", desc: "Lightweight, isolated environments packaging app + dependencies. Share the host OS kernel. Faster and smaller than VMs. Docker is the standard." },
+    { id: 36, name: "Docker", desc: "Platform for building, running, and distributing containers. Dockerfile defines the image. Docker Compose for multi-container apps." },
+    { id: 37, name: "Container Images", desc: "Read-only templates for creating containers. Built in layers. Stored in registries (Docker Hub, ECR, GCR). Tag images for versioning." },
+    { id: 38, name: "Dockerfile Best Practices", desc: "Multi-stage builds, minimize layers, use .dockerignore, pin base image versions, run as non-root, keep images small (<100MB ideal)." },
+    { id: 39, name: "Container Registry", desc: "Storage and distribution service for container images. Docker Hub, AWS ECR, GCR, GitHub Container Registry, Harbor (self-hosted)." },
+    { id: 40, name: "Kubernetes (K8s)", desc: "Container orchestration platform. Automates deployment, scaling, networking, and management of containerized apps. The industry standard." },
+    { id: 41, name: "K8s Pods", desc: "Smallest deployable unit in Kubernetes. One or more containers sharing network/storage. Pods are ephemeral — they get replaced, not repaired." },
+    { id: 42, name: "K8s Deployments & ReplicaSets", desc: "Deployment manages desired state (replicas, image version). ReplicaSet ensures the right number of pods are running. Handles rolling updates." },
+    { id: 43, name: "K8s Services", desc: "Stable network endpoint for a set of pods. Types: ClusterIP (internal), NodePort (external port), LoadBalancer (cloud LB), ExternalName." },
+    { id: 44, name: "K8s Ingress", desc: "Manages external HTTP/HTTPS access to services. Path-based and host-based routing. Controllers: Nginx, Traefik, AWS ALB Ingress." },
+    { id: 45, name: "K8s ConfigMaps & Secrets", desc: "ConfigMaps: non-sensitive config data as key-value pairs. Secrets: sensitive data (base64-encoded). Injected as env vars or mounted files." },
+    { id: 46, name: "K8s Namespaces", desc: "Virtual clusters within a physical cluster. Isolate environments (dev, staging, prod) or teams. Resource quotas per namespace." },
+    { id: 47, name: "K8s StatefulSets", desc: "For stateful applications needing stable identities and persistent storage. Ordered deployment/scaling. Used for databases, Kafka, ZooKeeper." },
+    { id: 48, name: "K8s DaemonSets", desc: "Ensures a pod runs on every node (or selected nodes). Used for logging agents, monitoring, node-level networking (Fluentd, Datadog agent)." },
+    { id: 49, name: "K8s Horizontal Pod Autoscaler (HPA)", desc: "Automatically scales pod replicas based on CPU, memory, or custom metrics. Responds to traffic spikes without manual intervention." },
+    { id: 50, name: "Helm", desc: "Package manager for Kubernetes. Charts are reusable, parameterized K8s manifest templates. Simplifies complex deployments. values.yaml for config." },
+    { id: 51, name: "K8s Operators", desc: "Custom controllers that encode operational knowledge. Automate lifecycle management of complex stateful apps (databases, message brokers)." },
+    { id: 52, name: "Service Mesh", desc: "Infrastructure layer for service-to-service communication. Handles mTLS, retries, observability, traffic management. Istio, Linkerd, Consul Connect." },
+    { id: 53, name: "Container Security", desc: "Scan images for vulnerabilities (Trivy, Snyk), run as non-root, use read-only filesystems, Pod Security Standards, network policies." },
+    { id: 54, name: "Docker Compose", desc: "Tool for defining multi-container applications in a single YAML file. Great for local development and simple deployments. docker-compose up." },
+  ],
+};
+export default containersOrchestration;

@@ -1,0 +1,27 @@
+const typesNonFunctional = {
+  name: "Testing Types — Non-Functional",
+  icon: "◈",
+  color: "#EC4899",
+  concepts: [
+    { id: 40, name: "Non-Functional Testing", desc: "Testing attributes beyond functionality: performance, security, usability, reliability, scalability, compatibility. How well the system works, not what it does." },
+    { id: 41, name: "Performance Testing", desc: "Evaluating system speed, responsiveness, and stability under workload. Umbrella term for load, stress, endurance, and spike testing." },
+    { id: 42, name: "Load Testing", desc: "Testing under expected peak load. 'Can we handle 10,000 concurrent users?' Measures response times, throughput, resource usage under normal-to-high traffic." },
+    { id: 43, name: "Stress Testing", desc: "Pushing beyond maximum capacity to find breaking points. 'At what load does the system fail?' Identifies graceful degradation behavior and recovery." },
+    { id: 44, name: "Spike Testing", desc: "Sudden dramatic increase in load (e.g., flash sale, viral event). Tests how the system handles abrupt traffic surges and recovers afterward." },
+    { id: 45, name: "Endurance / Soak Testing", desc: "Sustained load over extended periods (hours, days). Detects memory leaks, resource exhaustion, degradation over time, and connection pool issues." },
+    { id: 46, name: "Scalability Testing", desc: "Measuring the system's ability to scale up (or down) as load changes. Verifies auto-scaling policies, horizontal scaling, and resource limits." },
+    { id: 47, name: "Volume Testing", desc: "Testing with large amounts of data. Large databases, many files, huge payloads. Identifies performance degradation as data grows over time." },
+    { id: 48, name: "Concurrency Testing", desc: "Multiple users performing the same operation simultaneously. Detects race conditions, deadlocks, data corruption. 100 users updating the same record." },
+    { id: 49, name: "Latency Testing", desc: "Measuring response time for individual operations. p50, p95, p99 percentiles. Network latency, database query time, API response time. Aiming for consistency." },
+    { id: 50, name: "Benchmark Testing", desc: "Comparing system performance against a known standard or previous version. Establishes baselines and detects performance regressions." },
+    { id: 51, name: "Usability Testing", desc: "Evaluating how easy and intuitive the software is for real users. Task completion rate, time-on-task, error rate, satisfaction scores. Think-aloud protocol." },
+    { id: 52, name: "Accessibility Testing (a11y)", desc: "Verifying software is usable by people with disabilities. WCAG guidelines, screen reader compatibility, keyboard navigation, color contrast, ARIA labels." },
+    { id: 53, name: "Compatibility Testing", desc: "Ensuring the software works across browsers, devices, OS versions, screen sizes, and resolutions. Cross-browser (Chrome, Firefox, Safari), cross-device." },
+    { id: 54, name: "Localization (L10n) Testing", desc: "Verifying software works correctly for specific locales: translations, date/time formats, currency, number formats, RTL text, cultural appropriateness." },
+    { id: 55, name: "Internationalization (i18n) Testing", desc: "Verifying the software architecture supports any locale without code changes. Unicode support, string externalization, layout flexibility, locale switching." },
+    { id: 56, name: "Reliability Testing", desc: "Verifying the system performs consistently over time under specified conditions. Mean Time Between Failures (MTBF), failure rate, recovery time." },
+    { id: 57, name: "Installability Testing", desc: "Testing installation, uninstallation, and upgrade procedures. Fresh installs, upgrades from previous versions, rollbacks, different configurations." },
+    { id: 58, name: "Configuration Testing", desc: "Testing the software under different hardware and software configurations. Varying RAM, CPU, OS versions, browser settings, network conditions." },
+  ],
+};
+export default typesNonFunctional;
