@@ -6,6 +6,20 @@ Each concept needs its one-liner `desc` expanded to a detailed markdown explanat
 
 ---
 
+## Analytics & Conversion (114 concepts) — `Analytics_Conversion_concepts.jsx` ✓ COMPLETE
+
+All 114 concepts written with rich descriptions across 11 subcategories (IDs 434–547).
+Subcategories: Analytics Foundations, Web Analytics (GA4, GTM, Sessions, UTM, Heatmaps), Product Analytics (Amplitude/Mixpanel, Funnels, Retention, DAU/MAU, PLG), Conversion Rate Optimization (CRO methodology, Landing pages, CTA, Forms, Checkout, Pricing), A/B Testing & Experimentation (Stats significance, Sample size, Bayesian, Bandit algorithms), Attribution & Marketing Analytics (Attribution models, MMM, Incrementality, UTM, Revenue analytics), Data Infrastructure & CDPs (CDP, Data warehouse, dbt, Segment, Server-side tracking, Reverse ETL), Customer Analytics (Segmentation, RFM, Churn prediction, Health score, VoC, Win/loss), Privacy & Analytics Compliance (GDPR, CMP, Cookieless, ATT, CCPA), E-commerce Analytics (Funnels, AOV, Cart abandonment, Merchandising, Mobile commerce), Advanced & AI Analytics (Predictive, AI-powered, Causal inference, Anomaly detection, Personalization).
+
+---
+
+## Cross-Platform Mobile (138 concepts) — `CrossPlatform_Mobile_concepts.jsx` ✓ COMPLETE
+
+All 138 concepts written with rich descriptions across 14 subcategories (IDs 296–433).
+Subcategories: Foundations & Core Concepts, React Native, Flutter & Dart, Other Frameworks (Ionic, KMM, MAUI, NativeScript, Tauri), UI & Design Systems, Navigation & Routing, State Management, Native APIs & Device Features, Performance & Optimization, Networking & Data Persistence, Testing & Quality, Deployment & App Stores, Architecture & Patterns, Advanced & Emerging (On-device ML, AR, Skia, Impeller, i18n, Wearables, CarPlay, Security).
+
+---
+
 ## Automation (102 concepts) — `Automation_concepts.jsx` ✓ COMPLETE
 
 All 102 concepts written with rich descriptions across 10 subcategories (IDs 194–295).
