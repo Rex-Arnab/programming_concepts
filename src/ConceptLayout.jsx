@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { SearchBar, FilterChip, CategoryHeader, ConceptCard, PageHeader, BackToTop } from "./components";
+import { SearchBar, FilterChip, CategoryHeader, ConceptCard, ConceptModal, PageHeader, BackToTop } from "./components";
+
+const emptyModal = { concept: null, categoryColor: null, categoryName: null };
 
 export default function ConceptLayout({
   title,
@@ -9,7 +11,7 @@ export default function ConceptLayout({
 }) {
   const [activeCategory, setActiveCategory] = useState(null);
   const [search, setSearch] = useState("");
-  const [expandedId, setExpandedId] = useState(null);
+  const [modal, setModal] = useState(emptyModal);
   const filterScrollRef = useRef(null);
 
   const totalConcepts = categories.reduce(
@@ -151,11 +153,8 @@ export default function ConceptLayout({
                   key={concept.id}
                   concept={concept}
                   color={cat.color}
-                  isExpanded={expandedId === concept.id}
-                  onToggle={() =>
-                    setExpandedId(
-                      expandedId === concept.id ? null : concept.id
-                    )
+                  onOpen={(c) =>
+                    setModal({ concept: c, categoryColor: cat.color, categoryName: cat.name })
                   }
                 />
               ))}
@@ -165,6 +164,15 @@ export default function ConceptLayout({
 
         {displayCategories.length > 2 && <BackToTop />}
       </main>
+
+      {/* ========== MODAL ========== */}
+      <ConceptModal
+        concept={modal.concept}
+        categoryName={modal.categoryName}
+        categoryColor={modal.categoryColor}
+        isOpen={!!modal.concept}
+        onClose={() => setModal(emptyModal)}
+      />
     </div>
   );
 }

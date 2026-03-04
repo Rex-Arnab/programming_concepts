@@ -393,3 +393,44 @@ code {
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
   font-size: 0.8125rem;
 }
+
+/* ─── Markdown Content (modal + card views) ─── */
+.markdown-content p {
+  margin-bottom: 0.75em;
+}
+.markdown-content p:last-child {
+  margin-bottom: 0;
+}
+.markdown-content strong {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+.markdown-content ul {
+  list-style: disc;
+  padding-left: 1.25em;
+  margin-bottom: 0.75em;
+}
+.markdown-content ol {
+  list-style: decimal;
+  padding-left: 1.25em;
+  margin-bottom: 0.75em;
+}
+.markdown-content li {
+  margin-bottom: 0.3em;
+}
+.markdown-content h2,
+.markdown-content h3 {
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-top: 1.25em;
+  margin-bottom: 0.4em;
+}
+.markdown-content h2 { font-size: 1rem; }
+.markdown-content h3 { font-size: 0.9375rem; }
+.markdown-content code {
+  font-size: 0.8125rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+}
