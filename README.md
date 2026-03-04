@@ -26,8 +26,9 @@ A static React SPA hosting interactive reference guides for core programming and
 | Databases | 128 | ✓ Complete |
 | Security | 106 | ✓ Complete |
 | Progressive Web Apps | 85 | ✓ Complete |
+| API Design | 88 | ✓ Complete |
 
-**Total: 1,978 concepts across 16 domains**
+**Total: 2,066 concepts across 17 domains**
 
 ---
 
@@ -127,7 +128,7 @@ npm run preview   # preview production build
 
 7. [x] Frontend Development
 8. [x] Backend Development
-9. [ ] API Design (REST, GraphQL, gRPC, WebSockets)
+9. [x] API Design (REST, GraphQL, gRPC, WebSockets)
 10. [ ] Web Performance & Core Web Vitals
 11. [x] Web Accessibility (a11y)
 12. [x] Progressive Web Apps (PWA)
