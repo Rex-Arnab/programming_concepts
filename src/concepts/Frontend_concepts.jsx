@@ -15,19 +15,20 @@ import browserApisWeb from './frontend-data/browser-apis-web';
 import testingFrontend from './frontend-data/testing-frontend';
 import advancedEmerging from './frontend-data/advanced-emerging';
 
-export const meta = {
-  title: "Frontend Concepts",
-  description: "180 essential frontend development concepts from HTML to WebGPU",
-  icon: FiLayout,
-  color: '#818cf8',
-};
-
 const categories = [
   htmlSemantics, cssStyling, javascriptCore, typescript,
   frameworksLibraries, stateManagement, performance, renderingArchitecture,
   toolingBuild, routingDataFetching, accessibilityUx, browserApisWeb,
   testingFrontend, advancedEmerging,
 ];
+
+export const meta = {
+  title: "Frontend Concepts",
+  description: "180 essential frontend development concepts from HTML to WebGPU",
+  icon: FiLayout,
+  color: '#818cf8',
+  conceptCount: categories.reduce((sum, cat) => sum + cat.concepts.length, 0),
+};
 
 export default function FrontendConcepts() {
   return (

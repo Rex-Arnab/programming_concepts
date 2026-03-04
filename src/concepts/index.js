@@ -8,6 +8,7 @@ const concepts = Object.entries(modules).map(([path, mod]) => {
     description: mod.meta?.description || '',
     icon: mod.meta?.icon || null,
     color: mod.meta?.color || '#818cf8',
+    conceptCount: mod.meta?.conceptCount || 0,
     Component: mod.default,
   };
 });

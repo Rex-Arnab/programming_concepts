@@ -14,18 +14,19 @@ import networkingServiceDiscovery from './devops-data/networking-service-discove
 import reliabilitySre from './devops-data/reliability-sre';
 import advancedEmerging from './devops-data/advanced-emerging';
 
-export const meta = {
-  title: "DevOps Concepts",
-  description: "DevOps principles, tools, and practices",
-  icon: FiTerminal,
-  color: '#10b981',
-};
-
 const categories = [
   corePrinciples, versionControl, cicdPipelines, containersOrchestration,
   cloudInfrastructure, infrastructureAsCode, monitoringObservability, deploymentStrategies,
   securityDevsecops, testing, networkingServiceDiscovery, reliabilitySre, advancedEmerging,
 ];
+
+export const meta = {
+  title: "DevOps Concepts",
+  description: "DevOps principles, tools, and practices",
+  icon: FiTerminal,
+  color: '#10b981',
+  conceptCount: categories.reduce((sum, cat) => sum + cat.concepts.length, 0),
+};
 
 export default function DevopsConcepts() {
   return (

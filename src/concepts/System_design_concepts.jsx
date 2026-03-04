@@ -13,18 +13,19 @@ import reliabilityResilience from './system-design-data/reliability-resilience';
 import observabilityOperations from './system-design-data/observability-operations';
 import advancedDistributed from './system-design-data/advanced-distributed';
 
-export const meta = {
-  title: "System Design Concepts",
-  description: "Core system design principles and patterns",
-  icon: FiCpu,
-  color: '#eab308',
-};
-
 const categories = [
   fundamentals, networkingCommunication, dataDatabases, caching,
   loadBalancingProxies, architecturePatterns, messagingStreaming, securityAuth,
   scalabilityPatterns, reliabilityResilience, observabilityOperations, advancedDistributed,
 ];
+
+export const meta = {
+  title: "System Design Concepts",
+  description: "Core system design principles and patterns",
+  icon: FiCpu,
+  color: '#eab308',
+  conceptCount: categories.reduce((sum, cat) => sum + cat.concepts.length, 0),
+};
 
 export default function SystemDesignConcepts() {
   return (

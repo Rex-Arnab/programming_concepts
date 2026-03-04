@@ -13,18 +13,19 @@ import socialMediaCommunity from './marketing-data/social-media-community';
 import strategyPlanning from './marketing-data/strategy-planning';
 import emergingAdvanced from './marketing-data/emerging-advanced';
 
-export const meta = {
-  title: "Marketing Concepts",
-  description: "Essential marketing concepts and strategies",
-  icon: FiTrendingUp,
-  color: '#f43f5e',
-};
-
 const categories = [
   fundamentals, digitalMarketing, contentSeo, funnelsCustomerJourney,
   analyticsMetrics, growthAcquisition, pricingRevenue, brandingPsychology,
   emailAutomation, socialMediaCommunity, strategyPlanning, emergingAdvanced,
 ];
+
+export const meta = {
+  title: "Marketing Concepts",
+  description: "Essential marketing concepts and strategies",
+  icon: FiTrendingUp,
+  color: '#f43f5e',
+  conceptCount: categories.reduce((sum, cat) => sum + cat.concepts.length, 0),
+};
 
 export default function MarketingConcepts() {
   return (

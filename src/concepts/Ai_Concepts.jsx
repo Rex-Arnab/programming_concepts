@@ -15,19 +15,20 @@ import evaluationMetrics from './ai-data/evaluation-metrics';
 import buildingAiApps from './ai-data/building-ai-apps';
 import advancedFrontier from './ai-data/advanced-frontier';
 
-export const meta = {
-  title: "AI Concepts",
-  description: "Artificial intelligence and machine learning fundamentals",
-  icon: SiOpenai,
-  color: '#a78bfa',
-};
-
 const categories = [
   foundations, classicalMl, deepLearning, llms,
   ragKnowledge, aiAgents, computerVision, nlpSpeech,
   modelOptimization, mlopsInfrastructure, aiSafetyEthics, evaluationMetrics,
   buildingAiApps, advancedFrontier,
 ];
+
+export const meta = {
+  title: "AI Concepts",
+  description: "Artificial intelligence and machine learning fundamentals",
+  icon: SiOpenai,
+  color: '#a78bfa',
+  conceptCount: categories.reduce((sum, cat) => sum + cat.concepts.length, 0),
+};
 
 export default function AiConcepts() {
   return (

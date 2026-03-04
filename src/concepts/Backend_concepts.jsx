@@ -14,19 +14,20 @@ import scalabilityPerformance from './backend-data/scalability-performance';
 import reliabilityResilience from './backend-data/reliability-resilience';
 import advancedEmerging from './backend-data/advanced-emerging';
 
-export const meta = {
-  title: "Backend Concepts",
-  description: "Backend development fundamentals and architecture patterns",
-  icon: FiServer,
-  color: '#f97316',
-};
-
 const categories = [
   coreFundamentals, languagesRuntimes, apisCommunication, databasesStorage,
   dataModelingAccess, authSecurity, caching, messagingAsync,
   microservicesArchitecture, devopsOperations, scalabilityPerformance,
   reliabilityResilience, advancedEmerging,
 ];
+
+export const meta = {
+  title: "Backend Concepts",
+  description: "Backend development fundamentals and architecture patterns",
+  icon: FiServer,
+  color: '#f97316',
+  conceptCount: categories.reduce((sum, cat) => sum + cat.concepts.length, 0),
+};
 
 export default function BackendConcepts() {
   return (

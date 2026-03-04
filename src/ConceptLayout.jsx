@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { SearchBar, FilterChip, CategoryHeader, ConceptCard, ConceptModal, PageHeader, BackToTop } from "./components";
 
-const emptyModal = { concept: null, categoryColor: null, categoryName: null };
+const emptyModal = { concept: null, categoryColor: null, categoryName: null, allConcepts: [] };
 
 export default function ConceptLayout({
   title,
@@ -12,6 +12,7 @@ export default function ConceptLayout({
   const [activeCategory, setActiveCategory] = useState(null);
   const [search, setSearch] = useState("");
   const [modal, setModal] = useState(emptyModal);
+  const [filterScrolled, setFilterScrolled] = useState(false);
   const filterScrollRef = useRef(null);
 
   const totalConcepts = categories.reduce(
@@ -54,6 +55,26 @@ export default function ConceptLayout({
     }
   }, [activeCategory]);
 
+  // Filter bar scroll shadow
+  useEffect(() => {
+    const onScroll = () => setFilterScrolled(window.scrollY > 80);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const openModal = (concept, cat) => {
+    setModal({
+      concept,
+      categoryColor: cat.color,
+      categoryName: cat.name,
+      allConcepts: cat.concepts,
+    });
+  };
+
+  const navigateModal = (concept) => {
+    setModal((prev) => ({ ...prev, concept }));
+  };
+
   return (
     <div className="min-h-screen bg-(--color-bg) text-(--color-text-primary) font-sans">
       {/* ========== HEADER ========== */}
@@ -74,7 +95,13 @@ export default function ConceptLayout({
         </PageHeader>
 
         {/* ========== CATEGORY FILTER BAR ========== */}
-        <div className="border-t border-(--color-border) bg-(--color-bg-card)">
+        <div
+          className="border-t border-(--color-border) bg-(--color-bg-card) sticky top-[60px] z-40"
+          style={{
+            transition: "box-shadow 200ms ease",
+            boxShadow: filterScrolled ? "0 4px 16px -4px rgba(0,0,0,0.12)" : "none",
+          }}
+        >
           <div className="max-w-6xl xl:max-w-7xl 2xl:max-w-[1600px] mx-auto px-5 sm:px-8 lg:px-10 2xl:px-14">
             <div
               ref={filterScrollRef}
@@ -148,14 +175,13 @@ export default function ConceptLayout({
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-              {cat.concepts.map((concept) => (
+              {cat.concepts.map((concept, idx) => (
                 <ConceptCard
                   key={concept.id}
                   concept={concept}
                   color={cat.color}
-                  onOpen={(c) =>
-                    setModal({ concept: c, categoryColor: cat.color, categoryName: cat.name })
-                  }
+                  index={idx}
+                  onOpen={(c) => openModal(c, cat)}
                 />
               ))}
             </div>
@@ -172,6 +198,8 @@ export default function ConceptLayout({
         categoryColor={modal.categoryColor}
         isOpen={!!modal.concept}
         onClose={() => setModal(emptyModal)}
+        allConcepts={modal.allConcepts}
+        onNavigate={navigateModal}
       />
     </div>
   );
