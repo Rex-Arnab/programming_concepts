@@ -12,11 +12,16 @@ import emailAutomation from './marketing-data/email-automation';
 import socialMediaCommunity from './marketing-data/social-media-community';
 import strategyPlanning from './marketing-data/strategy-planning';
 import emergingAdvanced from './marketing-data/emerging-advanced';
+import b2bAbm from './marketing-data/b2b-abm';
+import productMarketing from './marketing-data/product-marketing';
+import ecommerceMarketing from './marketing-data/ecommerce-marketing';
+import eventPartnerships from './marketing-data/event-partnerships';
 
 const categories = [
   fundamentals, digitalMarketing, contentSeo, funnelsCustomerJourney,
   analyticsMetrics, growthAcquisition, pricingRevenue, brandingPsychology,
   emailAutomation, socialMediaCommunity, strategyPlanning, emergingAdvanced,
+  b2bAbm, productMarketing, ecommerceMarketing, eventPartnerships,
 ];
 
 export const meta = {
