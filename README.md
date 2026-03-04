@@ -21,8 +21,10 @@ A static React SPA hosting interactive reference guides for core programming and
 | Cross-Platform Mobile | 138 | ✓ Complete |
 | Analytics & Conversion | 114 | ✓ Complete |
 | Engineering Process & Leadership | 130 | ✓ Complete |
+| Design & UX | 116 | ✓ Complete |
+| Networking | 114 | ✓ Complete |
 
-**Total: 1,429 concepts across 11 domains**
+**Total: 1,659 concepts across 13 domains**
 
 ---
 
